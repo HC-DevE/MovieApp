@@ -1,9 +1,9 @@
 //homescreen
 import React from 'react';
-    import { View, Text, StyleSheet } from 'react-native';
-    // import { StackNavigationProp } from '@react-navigation/stack';
-import { useAuth } from '../../context/AuthContext';
-import Button from '../../components/Button';
+import { View, Text, StyleSheet } from 'react-native';
+// import { StackNavigationProp } from '@react-navigation/stack';
+// import { useAuth } from '../../context/AuthContext';
+// import Button from '../../components/Button';
 
 interface HomeScreenProps {
     // navigation: StackNavigationProp<any, 'Home'>;
@@ -11,12 +11,12 @@ interface HomeScreenProps {
 }
 
 const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
-    const { onLogout } = useAuth();
+    // const { onLogout } = useAuth();
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Home</Text>
-            <Button title="Logout" onPress={onLogout} />
+            {/* <Button title="Logout" onPress={onLogout} /> */}
         </View>
     );
 

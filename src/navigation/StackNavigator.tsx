@@ -9,6 +9,8 @@ import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import appTheme from '../constants/theme';
+import ProfileScreen from '../screens/profile/ProfileScreen';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,10 +20,12 @@ const getTabBarIcon = (route: string, focused: boolean, color: string, size: num
     let iconName;
     if (route === 'Home') {
         iconName = 'home';
-        color = focused ? appTheme.COLORS.primary : 'gray';
+    } else if (route === 'Profile') {
+        iconName = 'person';
     }
+    color = focused ? appTheme.COLORS.primary : 'gray';
 
-    return <AntDesignIcon name={iconName} size={size} color={color} />;
+    return <MaterialIcons name={iconName} size={size} color={color} />;
 };
 
 const HomeTabScreen = () => {
@@ -37,36 +41,16 @@ const HomeTabScreen = () => {
                 name="Home"
                 component={HomeScreen}
                 options={{
-                    // Vous pouvez ajouter d'autres options spécifiques à l'écran Home ici si nécessaire
-                }}
-            />
-            {/* <HomeTab.Screen `
-                name="Search" 
-                component={SearchScreen} 
-                options={{
-                    tabBarIcon: ({ color, size }) => (
-                        <Icon name="search" color={color} size={size} />
-                    ),
+                    headerShown: false,
                 }}
             />
             <HomeTab.Screen 
                 name="Profile" 
                 component={ProfileScreen} 
                 options={{
-                    tabBarIcon: ({ color, size }) => (
-                        <Icon name="person" color={color} size={size} />
-                    ),
+                    headerShown: false,
                 }}
             />
-            <HomeTab.Screen 
-                name="Wishlist" 
-                component={WishlistScreen} 
-                options={{
-                    tabBarIcon: ({ color, size }) => (
-                        <Icon name="heart" color={color} size={size} />
-                    ),
-                }}
-            /> */}
         </HomeTab.Navigator>
     );
 }

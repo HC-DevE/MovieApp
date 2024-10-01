@@ -6,15 +6,15 @@ import appTheme from '../constants/theme';
 interface ButtonProps {
   title: string;
   onPress: () => void;
-  variant?: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary' | 'danger';
   className?: string;
   textClassName?: string;
 }
 
 const Button: React.FC<ButtonProps> = ({ title, onPress, variant = 'primary', className, textClassName }) => {
   const baseButtonStyles = 'py-3 px-6 rounded-lg justify-center items-center';
-  const variantStyles = variant === 'primary' ? styles.primaryBg : styles.secondaryBg;
-  
+  const variantStyles = variant === 'primary' ? styles.primaryBg : variant === 'danger' ? styles.dangerBg : styles.secondaryBg;
+
   const baseTextStyles = 'text-base font-bold';
   const variantTextStyles = variant === 'primary' ? 'text-black' : 'text-white';
 
@@ -37,6 +37,9 @@ const styles = StyleSheet.create({
   },
   secondaryBg: {
     backgroundColor: appTheme.COLORS.secondary,
+  },
+  dangerBg: {
+    backgroundColor: '#FF6F61',
   },
 });
 
