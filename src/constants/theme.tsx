@@ -43,7 +43,7 @@ const SIZES = {
 const COLORS = {
     active: 'rgba(255, 255, 255, 0.7)',
     disabled:'rgba(255, 255, 255, 0.35)',
-    black: '#221F1E',
+    black: 'black', //#221F1E
     white: '#FFFFFF',
     transparent: 'transparent',
     facebook: '#3b5998',
@@ -55,7 +55,7 @@ const COLORS = {
     charcoal: '#595959',
     coal: '#2d2d2d',
     bloodOrange: '#fb5f26',
-    snow: 'white',
+    snow: '#FFFFFF',
     ember: 'rgba(164, 0, 48, 0.5)',
     fire: '#e73536',
     drawer: 'rgba(30, 30, 29, 0.95)',
@@ -67,8 +67,9 @@ const COLORS = {
     backgroundLight: '#F5F5F5',
     background: '#3E3E3E',
     primary: '#F2C94C',
-    secondary: '#7D8790',
+    secondary: '#333333', //BFBFBF, //7D8790
     tertiary: '#C4C4C4',
+    danger: '#FF6F61',
 };
 
 const FONTS = {

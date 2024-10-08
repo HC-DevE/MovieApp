@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
-import Button from '../../components/Button';
+import Button, { ButtonVariant } from '../../components/Button';
 
 const ProfileScreen: React.FC = () => {
     const { onLogout } = useAuth();
@@ -28,7 +28,7 @@ const ProfileScreen: React.FC = () => {
                     className="my-4"
                 />
                 <Button
-                    variant="danger"
+                    variant={ButtonVariant.DANGER}
                     title="Se déconnecter"
                     onPress={onLogout}
                     className="my-4 -mt-18"

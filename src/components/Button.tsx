@@ -6,17 +6,27 @@ import appTheme from '../constants/theme';
 interface ButtonProps {
   title: string;
   onPress: () => void;
-  variant?: 'primary' | 'secondary' | 'danger';
+  variant?: ButtonVariant;
   className?: string;
   textClassName?: string;
 }
 
-const Button: React.FC<ButtonProps> = ({ title, onPress, variant = 'primary', className, textClassName }) => {
+export enum ButtonVariant {
+    PRIMARY = 'primary',
+    SECONDARY = 'secondary',
+    DANGER = 'danger',
+    NAKED = 'naked',
+  }
+
+const Button: React.FC<ButtonProps> = ({ title, onPress, variant = ButtonVariant.PRIMARY, className, textClassName }) => {
   const baseButtonStyles = 'py-3 px-6 rounded-lg justify-center items-center';
-  const variantStyles = variant === 'primary' ? styles.primaryBg : variant === 'danger' ? styles.dangerBg : styles.secondaryBg;
+  const variantStyles = variant === ButtonVariant.PRIMARY ? styles.primaryBg
+    : variant === ButtonVariant.DANGER ? styles.dangerBg
+    : variant === ButtonVariant.NAKED ? styles.nakedBg
+    : styles.secondaryBg;
 
   const baseTextStyles = 'text-base font-bold';
-  const variantTextStyles = variant === 'primary' ? 'text-black' : 'text-white';
+  const variantTextStyles = (variant === ButtonVariant.PRIMARY || ButtonVariant.NAKED) ? appTheme.COLORS.primary : 'text-white';
 
   return (
     <TouchableOpacity
@@ -39,7 +49,10 @@ const styles = StyleSheet.create({
     backgroundColor: appTheme.COLORS.secondary,
   },
   dangerBg: {
-    backgroundColor: '#FF6F61',
+    backgroundColor: appTheme.COLORS.danger,
+  },
+  nakedBg: {
+    backgroundColor: 'transparent',
   },
 });
 

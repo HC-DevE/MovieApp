@@ -8,6 +8,7 @@ import appTheme from './src/constants/theme';
 import { AuthProvider } from './src/context/AuthContext';
 import AppNav from './src/navigation/AppNavigator';
 import './global.css';
+import { ThemeProvider } from './src/context/ThemeContext';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -18,10 +19,11 @@ function App(): React.JSX.Element {
   };
 
   return (
-    // <SafeAreaView>
     <SafeAreaView style={backgroundStyle}>
       <AuthProvider>
-        <AppNav />
+        <ThemeProvider>
+          <AppNav />
+        </ThemeProvider>
       </AuthProvider>
     </SafeAreaView>
   );

@@ -1,3 +1,18 @@
 {
+  // "compilerOptions": {
+  //    "typeRoots": ["./src/constants"]
+  // },
+  "compilerOptions": {
+    "strict": true,
+    "typeRoots": [
+      "./src/types",
+      " ./node_modules/@types"
+    ]
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "nativewind-env.d.ts"
+  ],
   "extends": "@react-native/typescript-config/tsconfig.json"
 }

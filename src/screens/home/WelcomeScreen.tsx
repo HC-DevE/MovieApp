@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, Image, SafeAreaView } from 'react-native';
+import { View, Text, SafeAreaView, ImageBackground } from 'react-native';
 import Button from '../../components/Button';
+import { images } from '../../constants';
 
 interface WelcomeScreenProps {
     navigation: any;
@@ -9,11 +10,11 @@ interface WelcomeScreenProps {
 const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
     return (
         <SafeAreaView className="flex-1 justify-between items-center px-10 py-10">
-            <View className="flex-1 items-center justify-start">
-                <Image
-                    source={require('./../../assets/images/Movies mobile app home.png')}
-                    className="w-40 h-40 mb-6"
-                // resizeMode="contain"
+            <View className="flex-1">
+                <ImageBackground
+                    className="flex-1 justify-center h-full"
+                    source={images.STRANGER}
+                    resizeMode="cover"
                 />
                 <Text className="text-3xl text-center font-bold mb-2 text-black">Movie App</Text>
                 <Text className="text-lg text-center text-black mb-8">
