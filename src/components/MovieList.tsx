@@ -4,7 +4,7 @@ import appTheme from '../constants/theme';
 import { useTheme } from '../context/ThemeContext';
 import Button, { ButtonVariant } from './Button';
 
-interface Movie {
+export interface Movie {
     id: number;
     title: string;
     poster: any;
@@ -16,7 +16,7 @@ interface MovieListProps {
     movies: Movie[];
 }
 
-const MovieItem: React.FC<{ movie: Movie }> = ({ movie }) => {
+export const MovieItem: React.FC<{ movie: Movie }> = ({ movie }) => {
     const { isDarkMode } = useTheme();
 
     const textColor = isDarkMode ? 'text-white' : 'text-black';

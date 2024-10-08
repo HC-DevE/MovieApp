@@ -12,6 +12,8 @@ import ProfileScreen from '../screens/profile/ProfileScreen';
 import { icons } from '../constants';
 import { TabIcon } from '../components/TabIcon';
 import { useTheme } from '../context/ThemeContext';
+import { SearchScreen } from '../screens/search/SearchScreen';
+import { WishlistScreen } from '../screens/wishlist/WishlistScreen';
 // import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 // import AntIconDesign from 'react-native-vector-icons/AntDesign'; // AntDesignIcon
 
@@ -49,79 +51,8 @@ const getTabBarIcon = (route: string, focused: boolean, color: string, size: num
             iconSrc = icons.home;
     }
 
-    console.log({color});
-
     return <TabIcon name={iconName} size={size} color={color} icon={iconSrc} focused={focused} />;
 };
-
-// const HomeTabScreen = () => {
-//     return (
-//         <HomeTab.Navigator
-//             screenOptions={({ route }) => ({
-//                 headerShown: false,
-//                 tabBarIcon: ({ focused, color, size }) => getTabBarIcon(route.name, focused, color, size),
-//                 tabBarActiveTintColor: appTheme.COLORS.primary,
-//                 tabBarInactiveTintColor: appTheme.COLORS.secondary, //#BFBFBF
-//             })}
-//         >
-//             <HomeTab.Screen
-//                 name="Home"
-//                 component={HomeScreen}
-//             // options={{
-//             //     headerShown: false,
-//             //     tabBarIcon: ({ focused }) => (
-//             //         <TabIcon icon={icons.home} focused={focused} name='Home' color={focused ? appTheme.COLORS.primary : appTheme.COLORS.secondary}/>
-//             //     ),
-//             // }}
-//             />
-
-//             <HomeTab.Screen
-//                 name="Search"
-//                 component={ProfileScreen}
-//             // options={{
-//             //     headerShown: false,
-//             //     tabBarIcon: ({ focused }) => (
-//             //         <TabIcon icon={icons.search} focused={focused} name='Search' />
-//             //     ),
-//             // }}
-//             />
-//             <HomeTab.Screen
-//                 name="Wishlist"
-//                 component={ProfileScreen}
-//             // options={{
-//             //     headerShown: false,
-//             //     tabBarIcon: ({ focused }) => (
-//             //         <TabIcon icon={icons.bookmark} focused={focused} name='Wishlist' />
-//             //     ),
-//             // }}
-//             />
-//             <HomeTab.Screen
-//                 name="Profile"
-//                 component={ProfileScreen}
-//             // options={{
-//             //     headerShown: false,
-//             //     tabBarIcon: ({ focused }) => (
-//             //         <TabIcon icon={icons.profile} focused={focused} name='Profile' />
-//             //     ),
-//             // }}
-//             />
-
-
-//         </HomeTab.Navigator>
-//     );
-// };
-
-// const WelcomeStackScreen = () => {
-//     return (
-//         <WelcomeStack.Navigator>
-//             <WelcomeStack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
-//             <WelcomeStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-//             <WelcomeStack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
-//             {/* <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-//             <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} /> */}
-//         </WelcomeStack.Navigator>
-//     );
-// };
 
 const AuthenticatedTabs = () => {
     const { isDarkMode } = useTheme();
@@ -130,15 +61,20 @@ const AuthenticatedTabs = () => {
         <Tab.Navigator
             screenOptions={({ route }) => ({
                 headerShown: false,
+                tabBarShowLabel: false,
                 tabBarIcon: ({ focused, color, size }) => getTabBarIcon(route.name, focused, color, size),
                 tabBarActiveTintColor: appTheme.COLORS.primary,
                 tabBarInactiveTintColor: isDarkMode ? appTheme.COLORS.white : appTheme.COLORS.black,
-                tabBarStyle: { backgroundColor: isDarkMode ? appTheme.COLORS.black : appTheme.COLORS.white },
+                tabBarStyle: {
+                    backgroundColor: isDarkMode ? appTheme.COLORS.black : appTheme.COLORS.white,
+                    borderTopColor: 'transparent',
+                    borderTopWidth: 0,
+                },
             })}
         >
             <Tab.Screen name="Home" component={HomeScreen} />
-            {/* <Tab.Screen name="Search" component={SearchScreen} />
-            <Tab.Screen name="Wishlist" component={WishlistScreen} /> */}
+            <Tab.Screen name="Search" component={SearchScreen} />
+            <Tab.Screen name="Wishlist" component={WishlistScreen} />
             <Tab.Screen name="Profile" component={ProfileScreen} />
         </Tab.Navigator>
     );
