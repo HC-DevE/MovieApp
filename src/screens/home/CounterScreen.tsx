@@ -18,7 +18,7 @@ import {
     // LearnMoreLinks,
     // ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-// import Button from './src/components/Button';
+// import {Button} from './src/components/Button';
 
 
 

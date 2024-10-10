@@ -69,6 +69,7 @@ const AuthenticatedTabs = () => {
                     backgroundColor: isDarkMode ? appTheme.COLORS.black : appTheme.COLORS.white,
                     borderTopColor: 'transparent',
                     borderTopWidth: 0,
+                    height: 84,
                 },
             })}
         >
@@ -82,7 +83,9 @@ const AuthenticatedTabs = () => {
 
 const UnauthenticatedStack = () => {
     return (
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={{
+            headerShown: false,
+        }}>
             <Stack.Screen name="Welcome" component={WelcomeScreen} />
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Register" component={RegisterScreen} />

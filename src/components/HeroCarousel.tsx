@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { View, Image, Text, useColorScheme } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { images } from '../constants';
-import Button, { ButtonVariant } from './Button';
+import { CustomButton, ButtonType, ButtonVariant } from './CustomButton';
 
 // const heroItems = [
 //     { title: 'Avengers', image: images.AVENGERS },
@@ -20,19 +20,34 @@ const heroItems = [
     { title: 'Spiderhead', image: images.STRANGER },
 ];
 
-export const HeroCarousel = ({ className }: {className: string}) => {
+export const HeroCarousel = ({ className }: { className: string }) => {
     const colorScheme = useColorScheme();
+    const swiperRef = useRef<Swiper>(null);
 
     return (
         <View className={`${className}`}>
             <Swiper
+                ref={swiperRef}
                 loop
                 autoplay
-                dot={<View className="w-2 h-2 bg-gray-500 rounded-full mx-1" />}
-                activeDot={<View className="w-2 h-2 bg-white rounded-full mx-1" />}
+                dot={<View
+                        style={{
+                        height: 4,
+                        width: 4,
+                    }} 
+                    className="w-2 h-2 bg-[#F2F2F7] rounded-full mx-1" />}
+                activeDot={<View
+                        style={{
+                        height: 4,
+                        width: 4,
+                    }} 
+                    className="w-2 h-2 bg-primary rounded-full mx-1" />}
+                paginationStyle={{
+                    bottom: -10
+                }}
             >
                 {heroItems.map((item, index) => (
-                    <View key={index} className="flex-1 w-full h-full">
+                    <View key={index} className="flex items-center justify-center">
                         <Image
                             source={item.image}
                             className="w-full h-full"
@@ -42,17 +57,19 @@ export const HeroCarousel = ({ className }: {className: string}) => {
                             <Text>My List</Text>
                             <Text>Discover</Text>
                             <View className="w-full flex-row items-center justify-between gap-2">
-                                <Button
+                                <CustomButton
                                     className="w-1/2"
+                                    type={ButtonType.FULL}
                                     variant={ButtonVariant.SECONDARY}
                                     title={'+ Wishlist'}
                                     onPress={() => { }}
                                 />
-                                <Button
+                                <CustomButton
                                     className="w-1/2"
-                                    textClassName="text-black"
                                     title={'Details'}
                                     onPress={() => { }}
+                                    type={ButtonType.FULL}
+                                    variant={ButtonVariant.PRIMARY}
                                 />
                             </View>
                         </View>

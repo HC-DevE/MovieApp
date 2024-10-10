@@ -1,8 +1,8 @@
 import React from 'react';
 import { Image, Text, View } from 'react-native';
 // import LinearGradient from 'react-native-linear-gradient';
-import Button from './Button';
 import { useTheme } from '../context/ThemeContext';
+import { CustomButton } from './CustomButton';
 // import { useTheme } from '@react-navigation/native';
 
 interface Ad {
@@ -29,7 +29,7 @@ export const AdBanner: React.FC<{ ad: Ad }> = ({ ad }) => {
             <Text className={`${isDarkMode ? 'text-white' : 'text-black'} mb-4 text-balance`}>
                 {ad.description}
             </Text>
-            <Button title="Check details" onPress={ad.onPress} textClassName={`${isDarkMode ? 'text-black' : 'text-white'}`} />
+            <CustomButton title="Check details" onPress={ad.onPress} textClassName={`${isDarkMode ? 'text-black' : 'text-white'}`} />
         </View>
     );
 };

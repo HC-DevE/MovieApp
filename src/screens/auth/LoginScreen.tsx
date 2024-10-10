@@ -4,7 +4,7 @@ import { LoginFormData } from '../../models/Login.model';
 import { useAuth } from '../../context/AuthContext';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { NavigationProp } from '@react-navigation/native';
-import CustomButton from '../../components/Button';
+import { ButtonType, ButtonVariant, CustomButton } from '../../components/CustomButton';
 // import ForgotPasswordScreen from './ForgotPasswordScreen';
 
 
@@ -42,7 +42,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Login</Text>
-            
+
             <View style={styles.formContainer}>
                 <View style={styles.inputContainer}>
                     <Controller
@@ -106,8 +106,11 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
             </View>
 
             <View style={styles.forgotPasswordContainer}>
-                <Button
+                <CustomButton
+                    // textClassName="text-[#277dff]" //blue
                     title="Forgot Password"
+                    type={ButtonType.NAKED}
+                    variant={ButtonVariant.PRIMARY}
                     onPress={() => {
                         navigation.navigate('ForgotPassword');
                     }}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 // import { useTheme } from '../context/ThemeContext';
-// import Button from './Button';
+// import {CustomButton} from './CustomButton';
 
 const genres = ['All', 'Romance', 'Sport', 'Kids', 'Horror'];
 
@@ -17,7 +17,7 @@ export const CategoryFilter = ({ className }: CategoryFilterProps) => {
         <View className={className}>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 {genres.map((genre) => (
-                    // <Button
+                    // <CustomButton
                     //     className={`px-4 py-2 mx-1 rounded-full ${selectedGenre === genre ? 'bg-white' : 'bg-gray-800'}`}
                     //     textClassName={`text-sm ${selectedGenre === genre ? 'text-black' : 'text-white'
                     //         }`}

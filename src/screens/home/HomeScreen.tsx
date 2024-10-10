@@ -2,7 +2,7 @@ import React from 'react';
 import { ScrollView, SafeAreaView, View, useColorScheme } from 'react-native';
 // import { StackNavigationProp } from '@react-navigation/stack';
 // import { useAuth } from '../../context/AuthContext';
-// import Button from '../../components/Button';
+// import {CustomButton} from '../../components/CustomButton';
 import { HeroCarousel } from '../../components/HeroCarousel';
 // import { SafeAreaView } from 'react-native-safe-area-context';
 import { CategoryFilter } from '../../components/CategoryFilter';
@@ -86,14 +86,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
 
     return (
         <SafeAreaView
-            // className="flex-1 justify-start items-center"
-            className={`${isDarkMode ? 'bg-black' : 'bg-white'}`}
+            className={`flex h-full items-center justify-between ${isDarkMode ? 'bg-black' : 'bg-white'}`}
         >
             <ScrollView>
-                <View className="flex-1 w-full h-full">
-                    <CategoryFilter className="absolute z-10 top-0 left-1/2 transform -translate-x-1/2 justify-center items-center mt-2 p-[2px] bg-[#42423fcc] rounded-full backdrop-blur-xl blur-xl" />
-                    <HeroCarousel className={'h-80'} />
-                </View>
+                <CategoryFilter className="absolute z-10 top-0 left-1/2 transform -translate-x-1/2 justify-center items-center mt-2 p-[2px] bg-[#42423fcc] rounded-full backdrop-blur-xl blur-xl" />
+                <HeroCarousel className="h-96" />
                 <MovieList title={'Marvel Studios'} movies={MOVIES.marvelMovies} />
                 <MovieList title={'Best Movies'} movies={MOVIES.bestMovies} />
                 <AdBanner ad={ad} />

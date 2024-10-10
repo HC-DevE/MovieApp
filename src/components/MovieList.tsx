@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
-import appTheme from '../constants/theme';
 import { useTheme } from '../context/ThemeContext';
-import Button, { ButtonVariant } from './Button';
+import  { CustomButton,ButtonSize,ButtonType,ButtonVariant } from './CustomButton';
 
 export interface Movie {
     id: number;
@@ -43,10 +42,7 @@ export const MovieList: React.FC<MovieListProps> = ({ title, movies }) => {
         <View className={`my-4 ${backgroundColor}`}>
             <View className="flex-row justify-between items-center mx-4 mb-2">
                 <Text className={`${textColor} text-lg font-bold`}>{title}</Text>
-                {/* <TouchableOpacity>
-                    <Text className={`${appTheme.COLORS.primary} text-sm`}>See more</Text>
-                </TouchableOpacity> */}
-                <Button variant={ButtonVariant.NAKED} title={'See more'} onPress={()=> null} />
+                <CustomButton size={ButtonSize.SMALL} type={ButtonType.NAKED} variant={ButtonVariant.PRIMARY} title={'See more'} onPress={()=> null} />
             </View>
             <FlatList
                 data={movies}

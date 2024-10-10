@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import appTheme from '../../constants/theme';
-import Button from '../../components/Button';
+import {CustomButton} from '../../components/CustomButton';
 import { RegisterFormData, RegisterScreenProps } from '../../models/Register.model';
 import { useAuth } from '../../context/AuthContext';
 
@@ -210,12 +210,12 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
                 <Text style={styles.errorText}>{errors.confirmPassword.message}</Text>
             )}
 
-            <Button
+            <CustomButton
                 title="Register"
                 onPress={handleSubmit(register)}
                 color={''}
                 disabled={watch('firstName') && watch('email') ? false : true} />
-            <Button
+            <CustomButton
                 title="Back to Login"
                 onPress={() => navigation.navigate('Login')}
                 color={''}
