@@ -24,7 +24,7 @@ export const SearchScreen: React.FC = () => {
             <View className="flex-row items-center p-4">
                 {/* <SearchIcon color={isDarkMode ? 'white' : 'black'} size={24} /> */}
                 <TextInput
-                    className={`flex-1 ml-2 border-b ${isDarkMode ? 'text-white border-white' : 'text-black border-black'}`}
+                    className={`flex-1 ml-2 focus:border-2 rounded-full -shadow-sm shadow-primary border-primary ${isDarkMode ? 'text-white ' : 'text-black'}`}
                     placeholder="Search movies..."
                     placeholderTextColor={isDarkMode ? 'gray' : 'darkgray'}
                     value={searchQuery}

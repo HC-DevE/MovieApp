@@ -14,6 +14,7 @@ import { TabIcon } from '../components/TabIcon';
 import { useTheme } from '../context/ThemeContext';
 import { SearchScreen } from '../screens/search/SearchScreen';
 import { WishlistScreen } from '../screens/wishlist/WishlistScreen';
+// import { MovieScreen } from '../screens/movies/MovieScreen';
 // import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 // import AntIconDesign from 'react-native-vector-icons/AntDesign'; // AntDesignIcon
 
@@ -77,6 +78,8 @@ const AuthenticatedTabs = () => {
             <Tab.Screen name="Search" component={SearchScreen} />
             <Tab.Screen name="Wishlist" component={WishlistScreen} />
             <Tab.Screen name="Profile" component={ProfileScreen} />
+            {/* create a stack navigator for the normal screens */}
+            {/* <Tab.Screen name="Movie" component={MovieScreen} /> */}
         </Tab.Navigator>
     );
 };
