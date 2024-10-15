@@ -57,11 +57,11 @@ export const HeroCarousel = ({ className }: { className?: string }) => {
                 >
                     {heroItems.map((item, index) => (
                         <View key={index} style={{ height: height * 0.5 }} className="w-full h-full py-3 px-3 justify-center items-center">
-                            <View className=''>
+                            <View className="flex-1">
                                 <Image
-                                    // className="h-5/6"
+                                    // className="h-full w-full"
                                     source={item.image}
-                                    style={{ width: width, height: (height * 0.5) * 0.94 }}
+                                    style={{ width: width, height: (height * 0.55) * 0.94 }}
                                     resizeMode="cover" //contain
                                 />
                                 <LinearGradient
@@ -86,22 +86,23 @@ export const HeroCarousel = ({ className }: { className?: string }) => {
                                         end={{ x: 0.5, y: 1 }}
                                     />
                                 </View>
-                                <View className="flex-1 flex-row mb-4 justify-between items-center" style={{ width: width * 0.9 }}>
+                                {/* bg-[#42423fcc] */}
+                                <View className="w-full flex-row mb-4 justify-between items-center ">
                                     <CustomButton
                                         // className="w-1/2"
                                         style={{ width: width * 0.45 }}
+                                        title={'+ Wishlist'}
                                         type={ButtonType.FULL}
                                         variant={ButtonVariant.SECONDARY}
-                                        title={'+ Wishlist'}
                                         onPress={() => { }}
-                                        />
+                                    />
                                     <CustomButton
                                         // className="w-1/2"
                                         style={{ width: width * 0.45 }}
                                         title={'Details'}
-                                        onPress={() => { }}
                                         type={ButtonType.FULL}
                                         variant={ButtonVariant.PRIMARY}
+                                        onPress={() => { }}
                                     />
                                 </View>
                             </View>

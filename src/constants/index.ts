@@ -9,7 +9,7 @@ import BLACKFRIDAY from '../assets/images/BLACKFRIDAY.png';
 import GODFATHER from '../assets/images/GODFATHER.png';
 import HAWKEYE from '../assets/images/HAWKEYE.png';
 import SPIDERHEAD from '../assets/images/SPIDERHEAD.png';
-import STRANGER from '../assets/images/STRANGER.png';
+import STRANGER from '../assets/images/STRANGER.jpeg';
 import THOR from '../assets/images/THOR.png';
 import FRAME from '../assets/images/FRAME.png';
 import {Movie} from '../components/MovieList';
@@ -115,3 +115,84 @@ export const MOVIESLIST: Movie[] = [
     rating: 8.9,
   },
 ];
+
+export const MOVIES = {
+  marvelMovies: [
+    {
+      id: 1,
+      title: 'Avengers',
+      poster: images.AVENGERS,
+      rating: 8.2,
+    },
+    {
+      id: 2,
+      title: 'SpiderHead',
+      poster: images.FRAME,
+      rating: 8.2,
+    },
+    {
+      id: 4,
+      title: 'Hawkeye',
+      poster: images.HAWKEYE,
+      rating: 7.9,
+    },
+    {
+      id: 5,
+      title: 'Thor',
+      poster: images.THOR,
+      rating: 7.9,
+    },
+  ],
+  bestMovies: [
+    {
+      id: 1,
+      title: 'Stranger Things',
+      poster: images.STRANGER,
+      rating: 9.2,
+    },
+    {
+      id: 2,
+      title: 'The Godfather',
+      poster: images.GODFATHER,
+      rating: 9.2,
+    },
+    {
+      id: 3,
+      title: 'The Dark Knight',
+      poster: images.THOR,
+      rating: 9.0,
+    },
+    {
+      id: 4,
+      title: '12 Angry Men',
+      poster: images.SPIDERHEAD,
+      rating: 9.0,
+    },
+  ],
+  similarMovies: [
+    {
+      id: 1,
+      title: 'Stranger Things',
+      poster: images.STRANGER,
+      rating: 9.2,
+    },
+    {
+      id: 2,
+      title: 'The Godfather',
+      poster: images.GODFATHER,
+      rating: 9.2,
+    },
+    {
+      id: 3,
+      title: 'The Dark Knight',
+      poster: images.THOR,
+      rating: 9.0,
+    },
+    {
+      id: 4,
+      title: '12 Angry Men',
+      poster: images.SPIDERHEAD,
+      rating: 9.0,
+    },
+  ],
+};

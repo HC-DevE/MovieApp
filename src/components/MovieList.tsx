@@ -2,8 +2,11 @@ import React from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { CustomButton, ButtonSize, ButtonType, ButtonVariant } from './CustomButton';
-import { useNavigation } from '@react-navigation/native';
-import MovieScreen from '../screens/movies/MovieScreen';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+
+type RootStackParamList = {
+    Movie: Movie;
+};
 
 export interface Movie {
     id: number;
@@ -19,13 +22,14 @@ interface MovieListProps {
 
 export const MovieItem: React.FC<{ movie: Movie }> = ({ movie }) => {
     const { isDarkMode } = useTheme();
-    const navigation = useNavigation();
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
     const textColor = isDarkMode ? 'text-white' : 'text-black';
-    const backgroundColor = isDarkMode ? 'bg-black' : 'bg-white';
+    const backgroundColor = 'bg-transparent';
+    // const backgroundColor = isDarkMode ? 'bg-black' : 'bg-white';
 
     return (
-        <TouchableOpacity className={`mr-3 ${backgroundColor}`} onPress={() => navigation.navigate('Movie')}>
+        <TouchableOpacity className={`mr-3 ${backgroundColor}`} onPress={() => navigation.navigate('Movie', movie)}>
             <Image source={movie.poster} className="w-24 h-36 rounded" />
             <Text className={`${textColor} text-xs mt-1`}>{movie.title}</Text>
             {/* {movie.rating && (
@@ -42,7 +46,8 @@ export const MovieList: React.FC<MovieListProps> = ({ title, movies }) => {
     const backgroundColor = isDarkMode ? 'bg-black' : 'bg-white';
 
     return (
-        <View className={`my-4 ${backgroundColor}`}>
+        // <View className={`my-4 ${backgroundColor}`}>
+        <View className={'my-4 bg-transparent'}>
             <View className="flex-row justify-between items-center mx-4 mb-2">
                 <Text className={`${textColor} text-lg font-bold`}>{title}</Text>
                 <CustomButton size={ButtonSize.SMALL} type={ButtonType.NAKED} variant={ButtonVariant.PRIMARY} title={'See more'} onPress={() => null} />

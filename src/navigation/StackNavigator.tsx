@@ -9,11 +9,13 @@ import { View, ActivityIndicator } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import appTheme from '../constants/theme';
 import ProfileScreen from '../screens/profile/ProfileScreen';
-import { icons } from '../constants';
+import { icons, MOVIESLIST } from '../constants';
 import { TabIcon } from '../components/TabIcon';
 import { useTheme } from '../context/ThemeContext';
 import { SearchScreen } from '../screens/search/SearchScreen';
 import { WishlistScreen } from '../screens/wishlist/WishlistScreen';
+import { MovieScreen } from '../screens/movies/MovieScreen';
+import { Movie } from '../components/MovieList';
 // import { MovieScreen } from '../screens/movies/MovieScreen';
 // import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 // import AntIconDesign from 'react-native-vector-icons/AntDesign'; // AntDesignIcon
@@ -97,6 +99,15 @@ const UnauthenticatedStack = () => {
     );
 };
 
+const MainStack = () => {
+    return (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="AuthenticatedTabs" component={AuthenticatedTabs} />
+            <Stack.Screen name="Movie" component={MovieScreen} />
+        </Stack.Navigator>
+    );
+};
+
 const StackNavigator = () => {
     const { authState, isLoading } = useAuth();
 
@@ -117,7 +128,7 @@ const StackNavigator = () => {
         //         <Stack.Screen name="WelcomeStack" component={WelcomeStackScreen} options={{ headerShown: false }} />
         //     )}
         // </Stack.Navigator>
-        authState?.authenticated ? <AuthenticatedTabs /> : <UnauthenticatedStack />
+        authState?.authenticated ? <MainStack /> : <UnauthenticatedStack />
     );
 };
 

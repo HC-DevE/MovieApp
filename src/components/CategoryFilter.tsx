@@ -14,7 +14,7 @@ export const CategoryFilter = ({ className }: CategoryFilterProps) => {
     // const { isDarkMode } = useTheme();
 
     return (
-        <View className={className}>
+        <View className={className} >
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 {genres.map((genre) => (
                     // <CustomButton
@@ -38,6 +38,6 @@ export const CategoryFilter = ({ className }: CategoryFilterProps) => {
                     </TouchableOpacity>
                 ))}
             </ScrollView>
-        </View>
+        </View >
     );
 };

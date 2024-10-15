@@ -1,11 +1,16 @@
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import React from 'react';
-import AntDesignIcon from 'react-native-vector-icons/AntDesign';
+import AntIconDesign from 'react-native-vector-icons/AntDesign';
+import FAIcon from 'react-native-vector-icons/FontAwesome';
+import FA5Icon from 'react-native-vector-icons/FontAwesome5';
+
+import { useTheme } from '../context/ThemeContext';
 
 type IconProps = {
     onPress?: () => void;
     className?: string;
     iconName: IconsName;
+    iconColor?: string;
 }
 
 export enum IconsName {
@@ -14,19 +19,25 @@ export enum IconsName {
     HEART = 'heart',
 }
 
-const CustomIcon = ({ onPress, className, iconName, ...props }: IconProps) => {
+const CustomIcon = ({ onPress, className, iconColor, iconName, ...props }: IconProps) => {
 
-    const getIconName = (icon: string) => {
+    const { isDarkMode } = useTheme();
+
+    const getAntDesignIconName = (icon: string) => {
         switch (icon) {
             case IconsName.ARROW_LEFT:
                 return 'arrowleft';
             case IconsName.ARROW_RIGHT:
                 return 'arrowright';
             case IconsName.HEART:
-                return 'hearto'; //outlined
+                return 'heart'; //outlined
             default:
                 return 'question';
         }
+    };
+
+    const getIconColorByTheme = () => {
+        return isDarkMode ? 'white' : 'black';
     };
 
     return (
@@ -35,9 +46,7 @@ const CustomIcon = ({ onPress, className, iconName, ...props }: IconProps) => {
             className={className}
             {...props}
         >
-            {/* {iconName === IconsName.ARROW_LEFT && <ChevronLeftIcon />}
-            {iconName === IconsName.ARROW_LEFT && <HeartIcon />} */}
-            <AntDesignIcon name={getIconName(iconName)} color={'black'} />
+            <AntIconDesign name={getAntDesignIconName(iconName)} color={iconColor ? iconColor : getIconColorByTheme()} size={26} />
         </TouchableOpacity>
     );
 };
