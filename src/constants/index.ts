@@ -127,7 +127,7 @@ export const MOVIES = {
     {
       id: 2,
       title: 'SpiderHead',
-      poster: images.FRAME,
+      poster: images.SPIDERHEAD,
       rating: 8.2,
     },
     {

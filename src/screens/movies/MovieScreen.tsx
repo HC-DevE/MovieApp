@@ -36,7 +36,7 @@ export const MovieScreen = () => {
                     <CustomIcon iconName={IconsName.HEART} iconColor={isFav === true ? 'red' : undefined} onPress={() => setIsFav(!isFav)} />
                 </SafeAreaView>
                 <View>
-                    <Image source={images.STRANGER}
+                    <Image source={movie?.poster}
                         style={{ width: width, height: height * 0.55 }}
                     />
                     <LinearGradient
