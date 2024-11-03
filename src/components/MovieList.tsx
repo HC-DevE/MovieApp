@@ -3,24 +3,19 @@ import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { CustomButton, ButtonSize, ButtonType, ButtonVariant } from './CustomButton';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { MovieResult } from '../interfaces/movie.interface';
+import { buildImageUrl } from '../../lib/api';
 
 type RootStackParamList = {
-    Movie: Movie;
+    Movie: MovieResult;
 };
-
-export interface Movie {
-    id: number;
-    title: string;
-    poster: any;
-    rating?: number;
-}
 
 interface MovieListProps {
     title: string;
-    movies: Movie[];
+    movies: MovieResult[];
 }
 
-export const MovieItem: React.FC<{ movie: Movie }> = ({ movie }) => {
+export const MovieItem: React.FC<{ movie: MovieResult }> = ({ movie }) => {
     const { isDarkMode } = useTheme();
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -30,7 +25,7 @@ export const MovieItem: React.FC<{ movie: Movie }> = ({ movie }) => {
 
     return (
         <TouchableOpacity className={`mr-3 ${backgroundColor}`} onPress={() => navigation.navigate('Movie', movie)}>
-            <Image source={movie.poster} className="w-24 h-36 rounded" />
+            <Image src={movie.poster_path && buildImageUrl(movie.poster_path)} className="w-24 h-36 rounded" />
             <Text className={`${textColor} text-xs mt-1`}>{movie.title}</Text>
             {/* {movie.rating && (
             <Text className="text-yellow-500 text-xs">{movie.rating.toFixed(1)}</Text>
