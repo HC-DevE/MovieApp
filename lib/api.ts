@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {ImageSizeEnum} from '../src/interfaces/movie.interface';
+import {ImageSizeEnum, MovieDetails, MovieResult} from '../src/interfaces/movie.interface';
 
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/';
@@ -17,7 +17,7 @@ const tmdbApi = axios.create({
 });
 
 export const buildImageUrl = (
-  path: string | undefined,
+  path: string,
   size: ImageSizeEnum = ImageSizeEnum.W500,
 ): string | null => {
   if (!path) {
@@ -46,9 +46,19 @@ export const getTopRatedMovies = async () => {
   }
 };
 
-export const getMovieDetails = async (movieId: number) => {
+export const getMovieDetails = async (movieId: number): Promise<MovieDetails> => {
+  const options = {
+    method: 'GET',
+    url: `${BASE_URL}/movie/${movieId}`,
+    params: {
+      api_key: API_KEY,
+    },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
   try {
-    const response = await tmdbApi.get(`/movie/${movieId}`);
+    const response = await axios.request(options);
     return response.data;
   } catch (error) {
     console.error(`Error fetching details for movie ID ${movieId}:`, error);
@@ -87,6 +97,24 @@ export const searchMovies = async (query: string) => {
   } catch (error) {
     console.log(error);
     console.error('Error searching for movies:', error);
+    throw error;
+  }
+};
+
+export const getSimilarMovies = async (movieId: number): Promise<MovieResult[]> => {
+  try {
+    const response = await tmdbApi.get(
+      `${BASE_URL}/movie/${movieId}/similar?api_key=${API_KEY}&language=en-US&page=1`,
+    );
+    return response.data;
+    // const options = {
+    //   method: 'GET',
+    //   url: `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${API_KEY}&language=en-US&page=1`,
+    //   };
+    //   const response = await axios.request(options);
+    //   return response.data;
+  } catch (error) {
+    console.error('Error fetching similar movies:', error);
     throw error;
   }
 };

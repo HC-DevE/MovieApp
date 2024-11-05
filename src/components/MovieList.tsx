@@ -38,10 +38,8 @@ export const MovieList: React.FC<MovieListProps> = ({ title, movies }) => {
     const { isDarkMode } = useTheme();
 
     const textColor = isDarkMode ? 'text-white' : 'text-black';
-    const backgroundColor = isDarkMode ? 'bg-black' : 'bg-white';
 
     return (
-        // <View className={`my-4 ${backgroundColor}`}>
         <View className={'my-4 bg-transparent'}>
             <View className="flex-row justify-between items-center mx-4 mb-2">
                 <Text className={`${textColor} text-lg font-bold`}>{title}</Text>

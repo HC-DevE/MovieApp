@@ -17,7 +17,7 @@ const Cast = ({ cast }) => {
     const characterName = 'test test';
     const personName = 'test test';
 
-    console.log({cast});
+    // console.log({cast});
 
     return (
         <View>
