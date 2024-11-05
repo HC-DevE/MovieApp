@@ -27,18 +27,17 @@ export const MovieScreen = () => {
     const height = appTheme.SIZES.screenHeight;
     const width = appTheme.SIZES.screenWidth;
 
-    const { data: movieDetailsData, isFetching: isDetailsFetching, error: isDetailsError } = useQuery({
+    const { data: movieDetails, isFetching: isDetailsFetching, error: isDetailsError } = useQuery({
         queryKey: ['movieDetails', movie.id],
-        queryFn: () => getMovieDetails(movie.id),
+        queryFn: async () => await getMovieDetails(movie.id),
     });
 
-    const { data: similarMoviesData, isFetching: isSimilarFetching, error: isSimilarError } = useQuery({
+    const { data: similarMovies, isFetching: isSimilarFetching, error: isSimilarError } = useQuery({
         queryKey: ['similarMovies', movie.id],
-        queryFn: () => getSimilarMovies(movie.id),
+        queryFn: async () => await getSimilarMovies(movie.id),
     });
 
-    const similarMovies = similarMoviesData?.results || [];
-    const movieDetails = movieDetailsData || [];
+    console.log(movieDetails?.genres);
 
     return (
         <ScrollView
@@ -46,15 +45,17 @@ export const MovieScreen = () => {
             className={'flex-1' + backgroundColor}
         >
             <View className="w-full">
-                {/* <Text>{movie?.title}</Text> */}
-                <SafeAreaView className="absolute z-20 w-full flex-row justify-between items-center px-4">
+                <SafeAreaView className="absolute z-20 w-full flex-row justify-between items-center px-4 py-2">
                     <CustomIcon className="bg-primary rounded-xl p-1" iconName={IconsName.ARROW_LEFT} iconColor={'white'} onPress={() => navigation.goBack()} />
                     <CustomIcon iconName={IconsName.HEART} iconColor={isFav === true ? 'red' : 'white'} onPress={() => setIsFav(!isFav)} />
                 </SafeAreaView>
-                <View>
+                <View
+                    className="w-full justify-center items-center"
+                >
                     <Image
-                        src={movieDetails.poster_path && buildImageUrl(movieDetails.poster_path)}
+                        src={movieDetails?.poster_path && buildImageUrl(movieDetails.poster_path)}
                         style={{ width: width, height: height * 0.55 }}
+                        // resizeMode="cover"
                     />
                     <LinearGradient
                         className="absolute bottom-0"
@@ -71,7 +72,7 @@ export const MovieScreen = () => {
                     />
                 </View>
             </View>
-            <View style={{ marginTop: -(height * 0.09) }} className="space-y-3">
+            <View style={{ marginTop: -(height * 0.1) }} className="space-y-3">
                 <Text className={`text-center text-3xl font-bold tracking-wider ${isDarkMode ? 'text-white' : 'text-black'}`}>
                     {movieDetails?.title}
                 </Text>
@@ -81,17 +82,19 @@ export const MovieScreen = () => {
                 </Text>
                 {/* TODO categry / genres */}
                 <View className="flex-row justify-center mx-4 space-x-2">
-                    <Text className={`text-center fond-bold ${isDarkMode ? 'text-white' : 'text-secondary'}`}>
-                        Action - Adventure - Drama
-                    </Text>
+                    {movieDetails?.genres && movieDetails.genres.length > 0 && (
+                        <Text className={`text-center font-bold ${isDarkMode ? 'text-white' : 'text-secondary'}`}>
+                            {movieDetails.genres.map(genre => genre.name).join(' - ')}
+                        </Text>
+                    )}
                 </View>
 
                 {/* description */}
-                <Text className={` mx-4 tracking-wide text-balance ${isDarkMode ? 'text-white' : 'text-secondary'}`}>
+                <Text className={`mt-4 mx-4 tracking-wide text-balance ${isDarkMode ? 'text-white' : 'text-secondary'}`}>
                     {movieDetails?.overview}
                 </Text>
             </View>
-            {/* TODO cast members */}
+            {/* TODO: cast members */}
             <Cast cast={cast} />
             {/* similar movies */}
             <MovieList title={'Similar Movies'} movies={similarMovies} />

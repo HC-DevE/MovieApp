@@ -26,7 +26,7 @@ export const SearchScreen: React.FC = () => {
     const { data, isFetching, error } = useQuery<MovieAPIResponse>(
         {
             queryKey: ['searchMovies', searchQuery],
-            queryFn: () => searchMovies(searchQuery),
+            queryFn: async () => await searchMovies(searchQuery),
             enabled: searchQuery.length >= 3, //TODO: add debounce ?
         }
     );
