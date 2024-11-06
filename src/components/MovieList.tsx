@@ -5,6 +5,7 @@ import { CustomButton, ButtonSize, ButtonType, ButtonVariant } from './CustomBut
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { MovieResult } from '../interfaces/movie.interface';
 import { buildImageUrl } from '../../lib/api';
+import { MovieBox } from './MovieBox';
 
 type RootStackParamList = {
     Movie: MovieResult;
@@ -26,10 +27,9 @@ export const MovieItem: React.FC<{ movie: MovieResult }> = ({ movie }) => {
     return (
         <TouchableOpacity className={`mr-3 ${backgroundColor}`} onPress={() => navigation.navigate('Movie', movie)}>
             <Image src={movie.poster_path && buildImageUrl(movie.poster_path)} className="w-24 h-36 rounded" />
-            <Text className={`${textColor} text-xs mt-1`}>{movie.title}</Text>
-            {/* {movie.rating && (
-            <Text className="text-yellow-500 text-xs">{movie.rating.toFixed(1)}</Text>
-        )} */}
+            <Text className={`${textColor} text-xs mt-1`}>{
+                movie.title.length > 13 ? movie.title.slice(0, 13) + '...' : movie.title}</Text>
+            {/* <Text className="text-yellow-500 text-xs">{movie.vote_average.toFixed(1)}</Text> */}
         </TouchableOpacity>
     )
 };
@@ -47,6 +47,7 @@ export const MovieList: React.FC<MovieListProps> = ({ title, movies }) => {
             </View>
             <FlatList
                 data={movies}
+                // renderItem={({ item }) => <MovieBox movie={item} />}
                 renderItem={({ item }) => <MovieItem movie={item} />}
                 keyExtractor={(item) => item.id.toString()}
                 horizontal

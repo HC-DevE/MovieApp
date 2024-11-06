@@ -19,7 +19,8 @@ export enum IconsName {
     ARROW_RIGHT = 'arrowRight',
     HEART = 'heart',
     XMARK = 'close',
-    SEARCH = 'search'
+    SEARCH = 'search',
+    STAR = 'star',
 }
 
 const CustomIcon = ({ onPress, className, iconColor, iconName, iconSize, ...props }: IconProps) => {
@@ -38,6 +39,8 @@ const CustomIcon = ({ onPress, className, iconColor, iconName, iconSize, ...prop
                 return 'closecircle'; //outlined: closecircleo
             case IconsName.SEARCH:
                 return 'search1'; //outlined: closecircleo
+            case IconsName.STAR:
+                return 'star'; //outlined: staro
             default:
                 return 'question';
         }

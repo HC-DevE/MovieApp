@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { ScrollView, SafeAreaView, ActivityIndicator, Text } from 'react-native';
+import { ScrollView, ActivityIndicator, Text, View } from 'react-native';
 // import { StackNavigationProp } from '@react-navigation/stack';
 // import { useAuth } from '../../context/AuthContext';
 // import {CustomButton} from '../../components/CustomButton';
 import { HeroCarousel } from '../../components/HeroCarousel';
-// import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { CategoryFilter } from '../../components/CategoryFilter';
 import { AdBanner } from '../../components/AdBanner';
 import { images } from '../../constants';
@@ -15,6 +15,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getDiscoverMovies, getMovieGenres, getNowPlayingMovies, getTopRatedMovies, getTrendingMovies, getUpcomingMovies } from '../../../lib/api';
 import { BlurView } from '@react-native-community/blur';
 import { MovieGenre } from '../../interfaces/movie.interface';
+import CounterScreen from './CounterScreen';
 
 interface HomeScreenProps {
     // navigation: StackNavigationProp<any, 'Home'>;
@@ -68,11 +69,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         queryFn: async () => await getTopRatedMovies(),
     });
 
-    // console.log(marvelMovies?.map((movie) => movie.genre_ids.some(
-    //     (genre) => genre === selectedGenre.id
-    // )));
-    // console.log(selectedGenre.id);
-
     if (isMarvelFetching || isTrendingFetching || isNowPlayingFetching || isGenresFetching) {
         return (
             <SafeAreaView className={`h-full items-center justify-center ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
@@ -90,13 +86,16 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     // }
 
     return (
-        <SafeAreaView className={`h-full items-center justify-between ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
-            <ScrollView>
+        <SafeAreaView className={`flex-1 w-full h-full items-center justify-between ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
+            <ScrollView
+                className='flex-1 w-full h-full mx-2'
+            >
+
                 <CategoryFilter
                     genres={movieGenres || []}
                     selectedGenre={selectedGenre}
                     setSelectedGenre={setSelectedGenre}
-                    className="absolute z-10 top-0 left-1/2 transform -translate-x-1/2 justify-center items-center mt-5 p-[2px] bg-[rgba(66,66,63,0.80)] rounded-[90px] backdrop-blur-[2px]" />
+                    className="absolute z-10 top-0 left-1/2 transform -translate-x-1/2 justify-center items-center mt-4 p-[2px] bg-[rgba(66,66,63,0.80)] rounded-[90px] backdrop-blur-[2px]" />
                 {/* <BlurView
                     className="absolute"
                     // blurType="dark"

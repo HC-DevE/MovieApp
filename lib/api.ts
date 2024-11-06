@@ -26,7 +26,7 @@ const tmdbApi = axios.create({
 
 export const buildImageUrl = (
   path: string,
-  size: ImageSizeEnum = ImageSizeEnum.W500,
+  size: ImageSizeEnum = ImageSizeEnum.W780,
 ): string | null => {
   if (!path) {
     return null;

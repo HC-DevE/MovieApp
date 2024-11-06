@@ -4,6 +4,7 @@ import bookmark from '../assets/icons/Bold/bookmark.png';
 import search from '../assets/icons/Bold/search.png';
 import profile from '../assets/icons/Bold/profile.png';
 import plus from '../assets/icons/Bold/plus.png';
+import star from '../assets/icons/Bold/Star.png';
 import AVENGERS from '../assets/images/AVENGERS.png';
 import BLACKFRIDAY from '../assets/images/BLACKFRIDAY.png';
 import GODFATHER from '../assets/images/GODFATHER.png';
@@ -19,6 +20,7 @@ export const icons = {
   home,
   plus,
   profile,
+  star,
   //   leftArrow,
   //   menu,
   search,
