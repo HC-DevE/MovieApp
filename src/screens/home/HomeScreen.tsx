@@ -15,7 +15,6 @@ import { useQuery } from '@tanstack/react-query';
 import { getDiscoverMovies, getMovieGenres, getNowPlayingMovies, getTopRatedMovies, getTrendingMovies, getUpcomingMovies } from '../../../lib/api';
 import { BlurView } from '@react-native-community/blur';
 import { MovieGenre } from '../../interfaces/movie.interface';
-import CounterScreen from './CounterScreen';
 
 interface HomeScreenProps {
     // navigation: StackNavigationProp<any, 'Home'>;
@@ -25,16 +24,16 @@ interface HomeScreenProps {
 export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     const { isDarkMode } = useTheme();
     const [selectedGenre, setSelectedGenre] = useState<MovieGenre>({
-        id: 0,
+        id: 'all',
         name: 'All',
     });
 
     const ad = {
-        title: 'Black Friday is here !',
+        title: 'Black Friday is here!',
         description: 'Get 20% off on your first purchase Get 20% off on your first purchase Get 20% off on your first purchase',
         image: images.BLACKFRIDAY,
         onPress: () => navigation.navigate('OfferDetails'),
-        className: 'm-4 p-4 rounded-lg',
+        className: ' rounded-lg',
     };
 
     const { data: movieGenres, isFetching: isGenresFetching, error: genresError } = useQuery({
@@ -87,28 +86,20 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
 
     return (
         <SafeAreaView className={`flex-1 w-full h-full items-center justify-between ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
-            <ScrollView
-                className='flex-1 w-full h-full mx-2'
-            >
-
+            <ScrollView>
                 <CategoryFilter
                     genres={movieGenres || []}
                     selectedGenre={selectedGenre}
                     setSelectedGenre={setSelectedGenre}
-                    className="absolute z-10 top-0 left-1/2 transform -translate-x-1/2 justify-center items-center mt-4 p-[2px] bg-[rgba(66,66,63,0.80)] rounded-[90px] backdrop-blur-[2px]" />
-                {/* <BlurView
-                    className="absolute"
-                    // blurType="dark"
-                    blurAmount={5}
-                    reducedTransparencyFallbackColor="black"
-                /> */}
+                />
+
                 <HeroCarousel movies={trendingMovies} />
                 <MovieList title={'Marvel Studios'}
                     movies={(marvelMovies || [])?.filter((movie) => selectedGenre.name === 'All' || movie.genre_ids.some(
                         (genre) => genre === selectedGenre.id
                     ))}
                 />
-                <MovieList title={'Best Movies'} movies={(topRatedMovies || []).filter(
+                <MovieList withAverageVote title={'Best Movies'} movies={(topRatedMovies || []).filter(
                     (movie) =>
                         selectedGenre.name === 'All' ||
                         movie.genre_ids?.some((genre) => genre === selectedGenre.id)

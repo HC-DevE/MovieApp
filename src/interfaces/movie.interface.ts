@@ -1,5 +1,5 @@
 export type MovieGenre = {
-  id: number;
+  id: number | string;
   name: string;
 };
 

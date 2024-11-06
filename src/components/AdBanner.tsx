@@ -17,11 +17,11 @@ export const AdBanner: React.FC<{ ad: Ad }> = ({ ad }) => {
     const { isDarkMode } = useTheme();
 
     return (
-        <View className={`m-6 rounded-lg ${ad.className} ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
+        <View className={`mt-[16px] px-[16px] rounded-lg ${ad.className} ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
             <Image
+                className="w-full h-[200px]"
                 source={ad.image}
-                className="w-full"
-                resizeMode="contain"
+                resizeMode="cover"
             />
             <Text className={`${isDarkMode ? 'text-white' : 'text-black'} text-xl font-bold my-4`}>
                 {ad.title}

@@ -13,6 +13,7 @@ const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/';
 const API_KEY = process.env.TMDB_API_KEY;
 const token = process.env.TMDB_API_ACCES_READ_TOKEN;
+const MARVEL_COMPANY_IDS = [420];
 
 const tmdbApi = axios.create({
   baseURL: BASE_URL,
@@ -27,9 +28,9 @@ const tmdbApi = axios.create({
 export const buildImageUrl = (
   path: string,
   size: ImageSizeEnum = ImageSizeEnum.W780,
-): string | null => {
+) => {
   if (!path) {
-    return null;
+    return '';
   }
   return `${IMAGE_BASE_URL}${size}${path}`;
 };
@@ -115,7 +116,7 @@ export const getDiscoverMovies = async ({
   sortBy?: DiscoverApiSortByEnum;
   companyIds?: number[];
 } = {}): Promise<MovieResult[]> => {
-  const companiesIds = isMarvel ? [420, ...(companyIds || [])] : companyIds;
+  const companiesIds = isMarvel ? [...MARVEL_COMPANY_IDS, ...(companyIds || [])] : companyIds;
   const params = {
     sort_by: sortBy,
     with_genres: genreIds?.join('|'),

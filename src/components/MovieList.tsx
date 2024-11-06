@@ -7,18 +7,19 @@ import { MovieResult } from '../interfaces/movie.interface';
 import { buildImageUrl } from '../../lib/api';
 import { MovieBox } from './MovieBox';
 
-type RootStackParamList = {
+export type MovieRootStackParamList = {
     Movie: MovieResult;
 };
 
-interface MovieListProps {
+type MovieListProps = {
     title: string;
     movies: MovieResult[];
+    withAverageVote?: boolean;
 }
 
 export const MovieItem: React.FC<{ movie: MovieResult }> = ({ movie }) => {
     const { isDarkMode } = useTheme();
-    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+    const navigation = useNavigation<NavigationProp<MovieRootStackParamList>>();
 
     const textColor = isDarkMode ? 'text-white' : 'text-black';
     const backgroundColor = 'bg-transparent';
@@ -34,7 +35,7 @@ export const MovieItem: React.FC<{ movie: MovieResult }> = ({ movie }) => {
     )
 };
 
-export const MovieList: React.FC<MovieListProps> = ({ title, movies }) => {
+export const MovieList: React.FC<MovieListProps> = ({ title, movies, withAverageVote = false }) => {
     const { isDarkMode } = useTheme();
 
     const textColor = isDarkMode ? 'text-white' : 'text-black';
@@ -47,8 +48,8 @@ export const MovieList: React.FC<MovieListProps> = ({ title, movies }) => {
             </View>
             <FlatList
                 data={movies}
-                // renderItem={({ item }) => <MovieBox movie={item} />}
-                renderItem={({ item }) => <MovieItem movie={item} />}
+                renderItem={({ item }) => <MovieBox withAverageVote={withAverageVote} movie={item} />}
+                // renderItem={({ item }) => <MovieItem movie={item} />}
                 keyExtractor={(item) => item.id.toString()}
                 horizontal
                 showsHorizontalScrollIndicator={false}

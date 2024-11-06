@@ -37,25 +37,28 @@ export const MovieScreen = () => {
         queryFn: async () => await getSimilarMovies(movie.id),
     });
 
-    console.log(movieDetails?.genres);
+    const handleFav = () => {
+        console.log('Added to Favorite', movie);
+        setIsFav(!isFav);
+    };
 
     return (
         <ScrollView
             contentContainerClassName="pb-20"
-            className={'flex-1' + backgroundColor}
+            className={`${backgroundColor} flex-1`}
         >
             <View className="w-full">
                 <SafeAreaView className="absolute z-20 w-full flex-row justify-between items-center px-4 py-2">
                     <CustomIcon className="bg-primary rounded-xl p-1" iconName={IconsName.ARROW_LEFT} iconColor={'white'} onPress={() => navigation.goBack()} />
-                    <CustomIcon iconName={IconsName.HEART} iconColor={isFav === true ? 'red' : 'white'} onPress={() => setIsFav(!isFav)} />
+                    <CustomIcon iconName={IconsName.HEART} iconColor={isFav === true ? 'red' : 'white'} onPress={handleFav} />
                 </SafeAreaView>
                 <View
                     className="w-full justify-center items-center"
                 >
                     <Image
-                        src={movieDetails?.poster_path && buildImageUrl(movieDetails.poster_path)}
+                        src={movieDetails?.poster_path ? buildImageUrl(movieDetails.poster_path) : ''}
                         style={{ width: width, height: height * 0.55 }}
-                        // resizeMode="cover"
+                    // resizeMode="cover"
                     />
                     <LinearGradient
                         className="absolute bottom-0"
