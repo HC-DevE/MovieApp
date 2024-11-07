@@ -3,26 +3,23 @@ import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { CustomButton, ButtonSize, ButtonType, ButtonVariant } from './CustomButton';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { MovieResult } from '../interfaces/movie.interface';
+import { buildImageUrl } from '../../lib/api';
+import { MovieBox } from './MovieBox';
 
-type RootStackParamList = {
-    Movie: Movie;
+export type MovieRootStackParamList = {
+    Movie: MovieResult;
 };
 
-export interface Movie {
-    id: number;
+type MovieListProps = {
     title: string;
-    poster: any;
-    rating?: number;
+    movies: MovieResult[];
+    withAverageVote?: boolean;
 }
 
-interface MovieListProps {
-    title: string;
-    movies: Movie[];
-}
-
-export const MovieItem: React.FC<{ movie: Movie }> = ({ movie }) => {
+export const MovieItem: React.FC<{ movie: MovieResult }> = ({ movie }) => {
     const { isDarkMode } = useTheme();
-    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+    const navigation = useNavigation<NavigationProp<MovieRootStackParamList>>();
 
     const textColor = isDarkMode ? 'text-white' : 'text-black';
     const backgroundColor = 'bg-transparent';
@@ -30,23 +27,20 @@ export const MovieItem: React.FC<{ movie: Movie }> = ({ movie }) => {
 
     return (
         <TouchableOpacity className={`mr-3 ${backgroundColor}`} onPress={() => navigation.navigate('Movie', movie)}>
-            <Image source={movie.poster} className="w-24 h-36 rounded" />
-            <Text className={`${textColor} text-xs mt-1`}>{movie.title}</Text>
-            {/* {movie.rating && (
-            <Text className="text-yellow-500 text-xs">{movie.rating.toFixed(1)}</Text>
-        )} */}
+            <Image src={movie.poster_path && buildImageUrl(movie.poster_path)} className="w-24 h-36 rounded" />
+            <Text className={`${textColor} text-xs mt-1`}>{
+                movie.title.length > 13 ? movie.title.slice(0, 13) + '...' : movie.title}</Text>
+            {/* <Text className="text-yellow-500 text-xs">{movie.vote_average.toFixed(1)}</Text> */}
         </TouchableOpacity>
     )
 };
 
-export const MovieList: React.FC<MovieListProps> = ({ title, movies }) => {
+export const MovieList: React.FC<MovieListProps> = ({ title, movies, withAverageVote = false }) => {
     const { isDarkMode } = useTheme();
 
     const textColor = isDarkMode ? 'text-white' : 'text-black';
-    const backgroundColor = isDarkMode ? 'bg-black' : 'bg-white';
 
     return (
-        // <View className={`my-4 ${backgroundColor}`}>
         <View className={'my-4 bg-transparent'}>
             <View className="flex-row justify-between items-center mx-4 mb-2">
                 <Text className={`${textColor} text-lg font-bold`}>{title}</Text>
@@ -54,7 +48,8 @@ export const MovieList: React.FC<MovieListProps> = ({ title, movies }) => {
             </View>
             <FlatList
                 data={movies}
-                renderItem={({ item }) => <MovieItem movie={item} />}
+                renderItem={({ item }) => <MovieBox withAverageVote={withAverageVote} movie={item} />}
+                // renderItem={({ item }) => <MovieItem movie={item} />}
                 keyExtractor={(item) => item.id.toString()}
                 horizontal
                 showsHorizontalScrollIndicator={false}

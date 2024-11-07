@@ -1,39 +1,55 @@
 import React, { useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { MovieGenre } from '../interfaces/movie.interface';
+import { BlurView } from '@react-native-community/blur';
+import { useTheme } from '../context/ThemeContext';
+import appTheme from '../constants/theme';
 // import { useTheme } from '../context/ThemeContext';
 // import {CustomButton} from './CustomButton';
 
-const genres = ['All', 'Romance', 'Sport', 'Kids', 'Horror'];
-
 export interface CategoryFilterProps {
-    className: string;
+    className?: string;
+    genres: MovieGenre[];
+    selectedGenre: MovieGenre;
+    setSelectedGenre: (genre: MovieGenre) => void;
 }
 
-export const CategoryFilter = ({ className }: CategoryFilterProps) => {
-    const [selectedGenre, setSelectedGenre] = useState('All');
-    // const { isDarkMode } = useTheme();
+export const CategoryFilter = ({
+    className,
+    genres,
+    selectedGenre,
+    setSelectedGenre,
+}: CategoryFilterProps) => {
+    const allGenres = [
+        { id: 'all', name: 'All' },
+        ...genres,
+    ];
+    const width = appTheme.SIZES.screenWidth;
 
     return (
-        <View className={className} >
+        <View
+            className={`${className} bg-transparent overflow-hidden absolute z-10 top-0 left-1/2 transform -translate-x-1/2 justify-center items-center mt-4 p-[3px]  rounded-[90px] `}
+            style={{ width: width * 0.9 }}
+        >
+            <BlurView
+                // eslint-disable-next-line react-native/no-inline-styles
+                style={{ backgroundColor: 'rgba(255,255,255, 0.67)', position: 'absolute', top: 0, left: 0, bottom: 0, right: 0 }}
+                blurAmount={0}
+                blurType="extraDark"
+            />
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {genres.map((genre) => (
-                    // <CustomButton
-                    //     className={`px-4 py-2 mx-1 rounded-full ${selectedGenre === genre ? 'bg-white' : 'bg-gray-800'}`}
-                    //     textClassName={`text-sm ${selectedGenre === genre ? 'text-black' : 'text-white'
-                    //         }`}
-                    //     title={genre}
-                    //     onPress={() => setSelectedGenre(genre)} />
+                {allGenres.length > 0 && allGenres?.map((genre) => (
                     <TouchableOpacity
-                        key={genre}
+                        key={genre.id}
                         onPress={() => setSelectedGenre(genre)}
-                        className={`rounded-full ${selectedGenre === genre ? 'bg-white' : 'bg-transparent'
+                        className={`px-6 py-3 rounded-full ${selectedGenre.name === genre.name ? 'bg-white' : 'bg-transparent'
                             }`}
                     >
                         <Text
-                            className={`px-6 py-3 text-sm ${selectedGenre === genre ? 'text-black' : 'text-white'
+                            className={`text-md ${selectedGenre.name === genre.name ? 'text-black' : 'text-white'
                                 }`}
                         >
-                            {genre}
+                            {genre.name}
                         </Text>
                     </TouchableOpacity>
                 ))}

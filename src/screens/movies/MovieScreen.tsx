@@ -2,42 +2,63 @@ import { View, Text, ScrollView, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomIcon, { IconsName } from '../../components/CustomIcon';
-import { Movie, MovieList } from '../../components/MovieList';
-import { useRoute, useNavigation } from '@react-navigation/native';
-import { images, MOVIES } from '../../constants';
+import { MovieList } from '../../components/MovieList';
+import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
+import { MOVIES } from '../../constants';
 import appTheme from '../../constants/theme';
 import LinearGradient from 'react-native-linear-gradient';
 import Cast from '../../components/Cast';
+import { MovieDetails, MovieResult } from '../../interfaces/movie.interface';
+import { useQuery } from '@tanstack/react-query';
+import { buildImageUrl, getMovieDetails, getSimilarMovies } from '../../../lib/api';
+import { useTheme } from '../../context/ThemeContext';
 
 export const MovieScreen = () => {
-    const { params: movie } = useRoute();
+    type MovieScreenRouteProp = RouteProp<{ MovieScreen: MovieResult }, 'MovieScreen'>;
+    const { params: movie } = useRoute<MovieScreenRouteProp>();
 
     const navigation = useNavigation();
+    const { isDarkMode } = useTheme();
+    const backgroundColor = isDarkMode ? 'bg-black' : 'bg-white';
     const [isFav, setIsFav] = useState(false);
     const [cast, setCast] = useState([1, 2, 3, 4, 5]);
-    const [similarMovies, setSimilarMovies] = useState(MOVIES.similarMovies);
+    // const [similarMovies, setSimilarMovies] = useState(MOVIES.similarMovies);
 
     const height = appTheme.SIZES.screenHeight;
     const width = appTheme.SIZES.screenWidth;
 
-    useEffect(() => {
-        //api call
-    }, [movie]);
+    const { data: movieDetails, isFetching: isDetailsFetching, error: isDetailsError } = useQuery({
+        queryKey: ['movieDetails', movie.id],
+        queryFn: async () => await getMovieDetails(movie.id),
+    });
+
+    const { data: similarMovies, isFetching: isSimilarFetching, error: isSimilarError } = useQuery({
+        queryKey: ['similarMovies', movie.id],
+        queryFn: async () => await getSimilarMovies(movie.id),
+    });
+
+    const handleFav = () => {
+        console.log('Added to Favorite', movie);
+        setIsFav(!isFav);
+    };
 
     return (
         <ScrollView
             contentContainerClassName="pb-20"
-            className="flex-1 bg-neutral-900"
+            className={`${backgroundColor} flex-1`}
         >
             <View className="w-full">
-                {/* <Text>{movie?.title}</Text> */}
-                <SafeAreaView className="absolute z-20 w-full flex-row justify-between items-center px-4">
+                <SafeAreaView className="absolute z-20 w-full flex-row justify-between items-center px-4 py-2">
                     <CustomIcon className="bg-primary rounded-xl p-1" iconName={IconsName.ARROW_LEFT} iconColor={'white'} onPress={() => navigation.goBack()} />
-                    <CustomIcon iconName={IconsName.HEART} iconColor={isFav === true ? 'red' : undefined} onPress={() => setIsFav(!isFav)} />
+                    <CustomIcon iconName={IconsName.HEART} iconColor={isFav === true ? 'red' : 'white'} onPress={handleFav} />
                 </SafeAreaView>
-                <View>
-                    <Image source={images.STRANGER}
+                <View
+                    className="w-full justify-center items-center"
+                >
+                    <Image
+                        src={movieDetails?.poster_path ? buildImageUrl(movieDetails.poster_path) : ''}
                         style={{ width: width, height: height * 0.55 }}
+                    // resizeMode="cover"
                     />
                     <LinearGradient
                         className="absolute bottom-0"
@@ -45,33 +66,38 @@ export const MovieScreen = () => {
                             width: width,
                             height: height * 0.40,
                         }}
-                        colors={['transparent', 'rgba(23,23,23,0.8)', 'rgba(23,23,23,1)']}
+                        colors={isDarkMode
+                            ? ['transparent', 'rgba(23,23,23,0.8)', 'rgba(23,23,23,1)']
+                            : ['transparent', 'rgba(255,255,255,0.8)', 'rgba(255,255,255,1)']
+                        }
                         start={{ x: 0.5, y: 0 }}
                         end={{ x: 0.5, y: 1 }}
                     />
                 </View>
             </View>
-            <View style={{ marginTop: -(height * 0.09) }} className="space-y-3">
-                <Text className="text-white text-center text-3xl fond-bold tracking-wider">
-                    {movie?.title}
+            <View style={{ marginTop: -(height * 0.1) }} className="space-y-3">
+                <Text className={`text-center text-3xl font-bold tracking-wider ${isDarkMode ? 'text-white' : 'text-black'}`}>
+                    {movieDetails?.title}
                 </Text>
                 {/* status realease and duration/runtime */}
-                <Text className="text-secondary text-center fond-semibold">
-                    {movie?.title}
+                <Text className={`text-center fond-semibold ${isDarkMode ? 'text-white' : 'text-secondary'}`}>
+                    {movieDetails?.release_date}
                 </Text>
-                {/* categry / genres */}
+                {/* TODO categry / genres */}
                 <View className="flex-row justify-center mx-4 space-x-2">
-                    <Text className="text-secondary text-center fond-bold">
-                        Action - Adventure - Drama
-                    </Text>
+                    {movieDetails?.genres && movieDetails.genres.length > 0 && (
+                        <Text className={`text-center font-bold ${isDarkMode ? 'text-white' : 'text-secondary'}`}>
+                            {movieDetails.genres.map(genre => genre.name).join(' - ')}
+                        </Text>
+                    )}
                 </View>
 
                 {/* description */}
-                <Text className="text-secondary mx-4 tracking-wide">
-                    {movie?.description}
+                <Text className={`mt-4 mx-4 tracking-wide text-balance ${isDarkMode ? 'text-white' : 'text-secondary'}`}>
+                    {movieDetails?.overview}
                 </Text>
             </View>
-            {/* cast members */}
+            {/* TODO: cast members */}
             <Cast cast={cast} />
             {/* similar movies */}
             <MovieList title={'Similar Movies'} movies={similarMovies} />

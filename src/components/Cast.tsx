@@ -1,8 +1,9 @@
 import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
 import { images } from '../constants';
+import { useTheme } from '../context/ThemeContext';
 
-type Cast = {
+export type Cast = {
     cast: string[];
     crew: string[];
     id: number;
@@ -14,14 +15,13 @@ type Cast = {
 }
 
 const Cast = ({ cast }) => {
+    const { isDarkMode } = useTheme();
     const characterName = 'test test';
     const personName = 'test test';
 
-    console.log({cast});
-
     return (
         <View>
-            <Text className="text-white text-lg mx-4 mb-5">Top Cast</Text>
+            <Text className={`text-lg mx-4 mb-5 ${isDarkMode ? 'text-white' : 'text-black'}`}>Top Cast</Text>
             <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
@@ -32,17 +32,17 @@ const Cast = ({ cast }) => {
                         <Image source={images.STRANGER}
                             className="w-20 h-24 rounded-2xl"
                         />
-                        <Text className="text-white text-xs mt-1">
+                        <Text className={`text-xs mt-1 ${isDarkMode ? 'text-white' : 'text-black'}`}>
                             {
                                 characterName.length > 10 ? characterName.slice(0, 10) + '...' : characterName
                             }
                         </Text>
-                        <Text className="text-secondary text-xs mt-1">
+                        <Text className={`text-xs mt-1 ${isDarkMode ? 'text-gray-400' : 'text-secondary'}`}>
                             {
                                 personName.length > 10 ? personName.slice(0, 10) + '...' : characterName
                             }
                         </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity>;
                 })}
             </ScrollView>
         </View>

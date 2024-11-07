@@ -11,15 +11,19 @@ type IconProps = {
     className?: string;
     iconName: IconsName;
     iconColor?: string;
+    iconSize?: number;
 }
 
 export enum IconsName {
     ARROW_LEFT = 'arrowLeft',
     ARROW_RIGHT = 'arrowRight',
     HEART = 'heart',
+    XMARK = 'close',
+    SEARCH = 'search',
+    STAR = 'star',
 }
 
-const CustomIcon = ({ onPress, className, iconColor, iconName, ...props }: IconProps) => {
+const CustomIcon = ({ onPress, className, iconColor, iconName, iconSize, ...props }: IconProps) => {
 
     const { isDarkMode } = useTheme();
 
@@ -31,6 +35,12 @@ const CustomIcon = ({ onPress, className, iconColor, iconName, ...props }: IconP
                 return 'arrowright';
             case IconsName.HEART:
                 return 'heart'; //outlined
+            case IconsName.XMARK:
+                return 'closecircle'; //outlined: closecircleo
+            case IconsName.SEARCH:
+                return 'search1'; //outlined: closecircleo
+            case IconsName.STAR:
+                return 'star'; //outlined: staro
             default:
                 return 'question';
         }
@@ -46,7 +56,7 @@ const CustomIcon = ({ onPress, className, iconColor, iconName, ...props }: IconP
             className={className}
             {...props}
         >
-            <AntIconDesign name={getAntDesignIconName(iconName)} color={iconColor ? iconColor : getIconColorByTheme()} size={26} />
+            <AntIconDesign name={getAntDesignIconName(iconName)} color={iconColor ? iconColor : getIconColorByTheme()} size={iconSize || 26} />
         </TouchableOpacity>
     );
 };

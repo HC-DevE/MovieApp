@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Text, ActivityIndicator } from 'react-native';
+import { TouchableOpacity, Text, ActivityIndicator, StyleProp, ViewStyle } from 'react-native';
 import { twMerge } from 'tailwind-merge';
 // import appTheme from '../constants/theme';
 import { useTheme } from '../context/ThemeContext';
@@ -15,6 +15,7 @@ type ButtonProps = {
   fullWidth?: boolean;
   size?: ButtonSize;
   type?: ButtonType;
+  style?: StyleProp<ViewStyle>;
 }
 
 export enum ButtonSize {
