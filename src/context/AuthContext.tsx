@@ -1,8 +1,10 @@
+import * as React from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { API_URL } from '../config/config';
 import { RegisterFormData } from '../models/Register.model.tsx';
 import { LoginFormData } from '../models/Login.model';
+import { storage } from '../../App.tsx';
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
@@ -15,8 +17,9 @@ interface AuthProps {
     onForgotPassword?: (data: { email: string }) => Promise<any>;
 }
 
-const TOKEN_KEY = 'jwt-auth-token';
-const FAKE_TOKEN = 'fake-jwt-token';
+const TOKEN_KEY = process.env.TOKEN_KEY || 'token';
+const FAKE_TOKEN = process.env.FAKE_TOKEN || 'fake_token';
+
 const AuthContext = createContext<AuthProps>({});
 
 export const useAuth = () => {
@@ -35,10 +38,9 @@ export const AuthProvider = ({ children }: any) => {
 
     useEffect(() => {
         const checkToken = async () => {
-            // Get token from local storage
+
             const token = await retrieveDataFromLocalStorage(TOKEN_KEY);
             if (token) {
-                // set the HTTP Headers
                 axios.defaults.headers.common.Authorization = `Bearer ${token}`;
                 setAuthState({ token: token, authenticated: true });
             } else {
@@ -50,90 +52,111 @@ export const AuthProvider = ({ children }: any) => {
 
     async function storeDataToLocalStorage(key: string, value: string) {
         try {
-            // const token = await AsyncStorage.setItem(key, value);
-            const token = FAKE_TOKEN;
+            const token = storage.set(key, value);
+            // const token = FAKE_TOKEN;
             return token;
         } catch (e) {
-            // saving error
-            console.log("error storing the data in localstorage");
+            console.log('error storing the data in localstorage');
         }
     }
 
     async function retrieveDataFromLocalStorage(key: string) {
         try {
-            // const value = await AsyncStorage.getItem(key);
-            const value = FAKE_TOKEN; //always authentificated
+            const value = storage.getString(key);
+            // const value = FAKE_TOKEN; //always authentificated
             if (value !== null) {
                 return value;
             }
         } catch (e) {
-            console.log("error retrieving the data from localstorage");
+            console.log('error retrieving the data from localstorage');
         }
     }
 
     async function removeDataFromLocalStorage(key: string) {
         try {
-            // const token = await AsyncStorage.removeItem(key);
-            const token = null;
+            const token = storage.delete(key);
             return token;
         } catch (e) {
-            console.log("error removing the data from localstorage");
+            console.log('error removing the data from localstorage');
         }
     }
 
     const onRegister = async (data: RegisterFormData) => {
         setIsLoading(true);
         const { password, confirmPassword, ...newData } = data;
+        // try {
+        //     const response = await axios.post(`${API_URL}auth/register`, {
+        //         ...newData,
+        //         passwordHash: password,
+        //     });
+        //     setIsLoading(false);
+        //     return response.data;
+        // } catch (error: any) {
+        //     setIsLoading(false);
+        //     const responseData = error?.response?.data;
+        //     return {
+        //         error: responseData?.error,
+        //         message: responseData?.message,
+        //     };
+        // }
+
         try {
-            const response = await axios.post(`${API_URL}auth/register`, {
-                ...newData,
-                passwordHash: password,
-            });
-            setIsLoading(false);
-            return response.data;
+            await storeDataToLocalStorage(TOKEN_KEY, FAKE_TOKEN);
+            setAuthState({ token: FAKE_TOKEN, authenticated: true });
+            return { token: FAKE_TOKEN };
         } catch (error: any) {
-            setIsLoading(false);
-            const responseData = error?.response?.data;
-            return {
-                error: responseData?.error,
-                message: responseData?.message,
-            };
+            console.log('Error during fake register:', error.message);
+            return { error: error.message };
         }
-    }
+        finally {
+            setIsLoading(false);
+        }
+    };
 
 
     const onLogin = async (data: LoginFormData) => {
         setIsLoading(true);
+        // try {
+        //     const response = await axios.post(`${API_URL}auth/login`, {
+        //         email: data.email,
+        //         passwordHash: data.password,
+        //     });
+        //     // storeDataToLocalStorage(TOKEN_KEY, response.data.token);
+        //     setAuthState({ token: response.data.token, authenticated: true });
+        //     axios.defaults.headers.common.Authorization = `Bearer ${response.data.token}`;
+        //     // await AsyncStorage.setItem(TOKEN_KEY, response.data.token);
+        //     setIsLoading(false);
+        //     return response.data;
+        // } catch (error: any) {
+        //     setIsLoading(false);
+        //     if (error.response) {
+        //         console.log("Error during login:", error.response.data);
+        //         return error.response.data;
+        //     } else {
+        //         console.log("Error during login:", error.message);
+        //         return error.message;
+        //     }
+        // }
+
         try {
-            const response = await axios.post(`${API_URL}auth/login`, {
-                email: data.email,
-                passwordHash: data.password,
-            });
-            // storeDataToLocalStorage(TOKEN_KEY, response.data.token);
-            setAuthState({ token: response.data.token, authenticated: true });
-            // set the HTTP Headers
-            axios.defaults.headers.common.Authorization = `Bearer ${response.data.token}`;
-            // await AsyncStorage.setItem(TOKEN_KEY, response.data.token);
-            setIsLoading(false);
-            return response.data;
+            await storeDataToLocalStorage(TOKEN_KEY, FAKE_TOKEN);
+            setAuthState({ token: FAKE_TOKEN, authenticated: true });
+            return { token: FAKE_TOKEN };
         } catch (error: any) {
+            console.log('Error during fake login:', error.message);
+            return { error: error.message };
+        }
+        finally {
             setIsLoading(false);
-            if (error.response) {
-                console.log("Error during login:", error.response.data);
-                return error.response.data;
-            } else {
-                console.log("Error during login:", error.message);
-                return error.message;
-            }
         }
     };
 
     const onLogout = async () => {
-        //Remove the token from local storage
-        // removeDataFromLocalStorage(TOKEN_KEY);
-        //Update the HTTP Headers
+
+        removeDataFromLocalStorage(TOKEN_KEY);
+
         axios.defaults.headers.common.Authorization = '';
-        //Reset the auth state
+
         setAuthState({ token: null, authenticated: false });
     };
 
@@ -144,17 +167,17 @@ export const AuthProvider = ({ children }: any) => {
             const response = await axios.post(`${API_URL}password/forgot-password`, {
                 email: data.email,
             });
-            setIsLoading(false);
             return response.data;
         } catch (error: any) {
-            setIsLoading(false);
             if (error.response) {
-                console.log("Error during forgot password:", error.response.data);
+                console.log('Error during forgot password:', error.response.data);
                 return error.response.data;
             } else {
-                console.log("Error during forgot password:", error.message);
+                console.log('Error during forgot password:', error.message);
                 return error.message;
             }
+        } finally {
+            setIsLoading(false);
         }
     };
 

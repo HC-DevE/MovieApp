@@ -22,7 +22,6 @@ export const MovieScreen = () => {
     const backgroundColor = isDarkMode ? 'bg-black' : 'bg-white';
     const [isFav, setIsFav] = useState(false);
     const [cast, setCast] = useState([1, 2, 3, 4, 5]);
-    // const [similarMovies, setSimilarMovies] = useState(MOVIES.similarMovies);
 
     const height = appTheme.SIZES.screenHeight;
     const width = appTheme.SIZES.screenWidth;
@@ -58,13 +57,16 @@ export const MovieScreen = () => {
                     <Image
                         src={movieDetails?.poster_path ? buildImageUrl(movieDetails.poster_path) : ''}
                         style={{ width: width, height: height * 0.55 }}
-                    // resizeMode="cover"
-                    />
-                    <LinearGradient
-                        className="absolute bottom-0"
+                        resizeMode="cover"
+                    /><LinearGradient
+                        // className="absolute bottom-0"
                         style={{
                             width: width,
-                            height: height * 0.40,
+                            height: height * 0.20,
+                            position: 'absolute',
+                            bottom: 0,
+                            left: 0,
+                            flexShrink: 0,
                         }}
                         colors={isDarkMode
                             ? ['transparent', 'rgba(23,23,23,0.8)', 'rgba(23,23,23,1)']
@@ -81,7 +83,7 @@ export const MovieScreen = () => {
                 </Text>
                 {/* status realease and duration/runtime */}
                 <Text className={`text-center fond-semibold ${isDarkMode ? 'text-white' : 'text-secondary'}`}>
-                    {movieDetails?.release_date}
+                    {movieDetails?.release_date?.split('-')[0]} - {movieDetails?.runtime} min - {movieDetails?.status}
                 </Text>
                 {/* TODO categry / genres */}
                 <View className="flex-row justify-center mx-4 space-x-2">
@@ -93,7 +95,7 @@ export const MovieScreen = () => {
                 </View>
 
                 {/* description */}
-                <Text className={`mt-4 mx-4 tracking-wide text-balance ${isDarkMode ? 'text-white' : 'text-secondary'}`}>
+                <Text className={`mt-4 mx-4 tracking-wide ${isDarkMode ? 'text-white' : 'text-gray'}`}>
                     {movieDetails?.overview}
                 </Text>
             </View>

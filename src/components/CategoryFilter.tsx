@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { MovieGenre } from '../interfaces/movie.interface';
 import { BlurView } from '@react-native-community/blur';
 import { useTheme } from '../context/ThemeContext';
@@ -25,6 +25,7 @@ export const CategoryFilter = ({
         ...genres,
     ];
     const width = appTheme.SIZES.screenWidth;
+    const isIOS = Platform.OS === 'ios';
 
     return (
         <View
@@ -32,10 +33,10 @@ export const CategoryFilter = ({
             style={{ width: width * 0.9 }}
         >
             <BlurView
-                // eslint-disable-next-line react-native/no-inline-styles
-                style={{ backgroundColor: 'rgba(255,255,255, 0.67)', position: 'absolute', top: 0, left: 0, bottom: 0, right: 0 }}
-                blurAmount={0}
-                blurType="extraDark"
+                style={{ ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(66,66,63, 0.6)', position: 'absolute', top: 0, left: 0, bottom: 0, right: 0 }}
+                // style={{ backgroundColor: 'rgba(255,255,255, 0.67)', position: 'absolute', top: 0, left: 0, bottom: 0, right: 0 }} or // 'rgba(0,0,0,0.5)
+                blurAmount={1}
+                blurType={isIOS ? 'extraDark' : 'dark'}
             />
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 {allGenres.length > 0 && allGenres?.map((genre) => (

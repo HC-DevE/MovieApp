@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 import { ScrollView, ActivityIndicator, Text, View } from 'react-native';
-// import { StackNavigationProp } from '@react-navigation/stack';
-// import { useAuth } from '../../context/AuthContext';
-// import {CustomButton} from '../../components/CustomButton';
 import { HeroCarousel } from '../../components/HeroCarousel';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CategoryFilter } from '../../components/CategoryFilter';
@@ -13,13 +10,20 @@ import { MovieList } from '../../components/MovieList';
 import { useTheme } from '../../context/ThemeContext';
 import { useQuery } from '@tanstack/react-query';
 import { getDiscoverMovies, getMovieGenres, getNowPlayingMovies, getTopRatedMovies, getTrendingMovies, getUpcomingMovies } from '../../../lib/api';
-import { BlurView } from '@react-native-community/blur';
 import { MovieGenre } from '../../interfaces/movie.interface';
 
 interface HomeScreenProps {
     // navigation: StackNavigationProp<any, 'Home'>;
     navigation: NavigationProp<any, 'Home'>;
 }
+
+const ad = {
+    title: 'Black Friday is here!',
+    description: 'Get 20% off on your first purchase Get 20% off on your first purchase Get 20% off on your first purchase',
+    image: images.BLACKFRIDAY,
+    // onPress: () => navigation.navigate('OfferDetails'),
+    className: ' rounded-lg',
+};
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     const { isDarkMode } = useTheme();
@@ -28,16 +32,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         name: 'All',
     });
 
-    const ad = {
-        title: 'Black Friday is here!',
-        description: 'Get 20% off on your first purchase Get 20% off on your first purchase Get 20% off on your first purchase',
-        image: images.BLACKFRIDAY,
-        onPress: () => navigation.navigate('OfferDetails'),
-        className: ' rounded-lg',
-    };
-
     const { data: movieGenres, isFetching: isGenresFetching, error: genresError } = useQuery({
-        queryKey: ['movieListGenres'],
+        queryKey: ['movieGenres'],
         queryFn: async () => await getMovieGenres(),
     });
 
@@ -53,22 +49,23 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         queryFn: async () => await getTrendingMovies(),
     });
 
-    const { data: nowPlayingMovies, isFetching: isNowPlayingFetching, error: nowPlayingError } = useQuery({
-        queryKey: ['nowPlayingMovies'],
-        queryFn: async () => await getNowPlayingMovies(),
+    const { data: topRatedMovies, isFetching: isTopRatedFetching, error: topRatedError } = useQuery({
+        queryKey: ['topRatedMovies'],
+        queryFn: async () => await getTopRatedMovies(),
     });
+
+    // const { data: nowPlayingMovies, isFetching: isNowPlayingFetching, error: nowPlayingError } = useQuery({
+    //     queryKey: ['nowPlayingMovies'],
+    //     queryFn: async () => await getNowPlayingMovies(),
+    // });
 
     // const { data: upcomingMovies, isFetching: isUpcomingFetching, error: upcomingError } = useQuery({
     //     queryKey: ['upcomingMovies'],
     //     queryFn: async () => await getUpcomingMovies(),
     // });
 
-    const { data: topRatedMovies, isFetching: isTopRatedFetching, error: topRatedError } = useQuery({
-        queryKey: ['topRatedMovies'],
-        queryFn: async () => await getTopRatedMovies(),
-    });
 
-    if (isMarvelFetching || isTrendingFetching || isNowPlayingFetching || isGenresFetching) {
+    if (isMarvelFetching || isTrendingFetching || isGenresFetching) {
         return (
             <SafeAreaView className={`h-full items-center justify-center ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
                 <ActivityIndicator />
@@ -76,7 +73,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         );
     }
 
-    // if (discoverError || trendingError || nowPlayingError || genresError) {
+    // if (discoverError || trendingError || genresError) {
     //     return (
     //         <SafeAreaView className={`h-full items-center justify-center ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
     //             <Text>Error fetching data</Text>
@@ -93,16 +90,16 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
                     setSelectedGenre={setSelectedGenre}
                 />
 
-                <HeroCarousel movies={trendingMovies} />
+                <HeroCarousel movies={(trendingMovies || [])?.filter(
+                    (movie) => movie.genre_ids.includes(selectedGenre.id) || selectedGenre.name === 'All'
+                )} />
                 <MovieList title={'Marvel Studios'}
-                    movies={(marvelMovies || [])?.filter((movie) => selectedGenre.name === 'All' || movie.genre_ids.some(
-                        (genre) => genre === selectedGenre.id
-                    ))}
+                    movies={(marvelMovies || [])?.filter(
+                        (movie) => selectedGenre.name === 'All' || movie.genre_ids.includes(selectedGenre.id)
+                    )}
                 />
-                <MovieList withAverageVote title={'Best Movies'} movies={(topRatedMovies || []).filter(
-                    (movie) =>
-                        selectedGenre.name === 'All' ||
-                        movie.genre_ids?.some((genre) => genre === selectedGenre.id)
+                <MovieList withAverageVote title={'Best Movies'} movies={(topRatedMovies || [])?.filter(
+                    (movie) => selectedGenre.name === 'All' || movie.genre_ids.includes(selectedGenre.id)
                 )} />
                 <AdBanner ad={ad} />
             </ScrollView>

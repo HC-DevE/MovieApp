@@ -1,253 +1,177 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
-import appTheme from '../../constants/theme';
-import {CustomButton} from '../../components/CustomButton';
+import React from 'react';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { useForm } from 'react-hook-form';
+import { CustomButton } from '../../components/CustomButton';
 import { RegisterFormData, RegisterScreenProps } from '../../models/Register.model';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
+import { CustomTextInput } from '../../components/CustomTextInput';
+// import CustomIcon from '../../components/CustomIcon';
 
-const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
-
-    const [data, setData]: [any, Function] = useState('');
-    // const { register, handleSubmit, errors } = useForm<RegisterFormData>();
+export const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
     const { onLogin, onRegister } = useAuth();
-    const { control, handleSubmit, formState: { errors }, watch } = useForm<RegisterFormData>();
+    const { isDarkMode } = useTheme();
 
-    const login = async () => {
-        const result = await onLogin!({
-            email: data.email,
-            password: data.password
-        });
-        if (result && result.error) {
-            console.log(result.msg);
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        watch,
+        getValues,
+        setValue,
+    } = useForm<RegisterFormData>({
+        defaultValues: {
+            firstName: '',
+            lastName: '',
+            email: '',
+            birthDate: '',
+            password: '',
+            confirmPassword: '',
+        },
+    });
+
+    const onSubmit = async (data: RegisterFormData) => {
+        try {
+            const result = await onRegister!(data);
+            if (result && result.token) {
+                // Automatically log in after successful registration
+                await onLogin!({
+                    email: data.email,
+                    password: data.password,
+                });
+            } else {
+                console.log(result.message);
+            }
+        } catch (error) {
+            console.error('Registration error', error);
         }
     };
-
-    const register = async (data: RegisterFormData) => {
-        const result = await onRegister!(data);
-        if (result && result.message !== 'User created successfully') {
-            console.log(result.message);
-        } else {
-            login();
-        }
-    };
-
-
-
 
     return (
-        <View style={styles.container}>
-            <Text style={appTheme.STYLES.subtitle as any}>Register</Text>
+        <ScrollView
+            className={`flex-1 ${isDarkMode ? 'bg-black' : 'bg-white'}`}
+            // eslint-disable-next-line react-native/no-inline-styles
+            contentContainerStyle={{
+                flexGrow: 1,
+                justifyContent: 'center',
+                paddingHorizontal: 20,
+                paddingVertical: 40,
+            }}
+            keyboardShouldPersistTaps="handled"
+        >
+            <View className="mb-8">
+                <Text className="text-3xl font-bold text-primary text-center mb-4">
+                    Create Account
+                </Text>
+                <Text className={`${isDarkMode ? 'text-white' : 'text-gray-500'} text-center`}>
+                    Sign up to get started
+                </Text>
+            </View>
 
-            <Controller
-                control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={
-                            (firstName) => {
-                                setData({
-                                    ...data,
-                                    firstName: firstName,
-                                });
-                            }
-                        }
-                        value={data.firstName}
-                        placeholder="First Name"
-                    />
-                )}
-                name="firstName"
-                defaultValue=""
-            />
-            {errors.firstName && <Text style={styles.errorText}>{errors.firstName.message}</Text>}
-            <Controller
-                control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                        style={styles.input}
-                        onBlur={onBlur}
-                        onChangeText={
-                            (value) => {
-                                onChange(value);
-                                setData({
-                                    ...data,
-                                    lastName: value,
-                                })
-                            }
-                        }
-                        value={value}
-                        placeholder="Last Name"
-                    />
-                )}
-                name="lastName"
-                defaultValue=""
-            />
-            {errors.lastName && <Text style={styles.errorText}>{errors.lastName.message}</Text>}
+            <View>
 
-            <Controller
-                control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                        style={styles.input}
-                        onBlur={onBlur}
-                        onChangeText={
-                            (value) => {
-                                onChange(value);
-                                setData({
-                                    ...data,
-                                    email: value
-                                })
-                            }
-                        }
-                        value={value}
-                        placeholder="Email"
-                    />
-                )}
-                name="email"
-                rules={{
-                    required: 'Email is required',
-                    pattern: {
-                        value: /^\S+@\S+$/i,
-                        message: 'Invalid email address',
-                    },
-                }}
-                defaultValue=""
-            />
-            {errors.email && <Text style={styles.errorText}>{errors.email.message}</Text>}
-            <Controller
-                control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                        style={styles.input}
-                        onBlur={onBlur}
-                        onChangeText={
-                            (value) => {
-                                onChange(value);
-                                setData({
-                                    ...data,
-                                    birthDate: value,
-                                })
-                            }
-                        }
-                        value={value}
-                        placeholder="Birth Date"
-                    />
-                )}
-                name="birthDate"
-                rules={{
+                <CustomTextInput
+                    name="firstName"
+                    placeholder="First Name"
+                    errors={errors}
+                    register={register}
+                    setValue={setValue}
+                    options={{
+                        required: 'First name is required',
+                    }}
+                />
+
+                <CustomTextInput
+                    name="lastName"
+                    placeholder="Last Name"
+                    errors={errors}
+                    register={register}
+                    setValue={setValue}
+                    options={{
+                        required: 'Last name is required',
+                    }}
+                />
+
+
+                <CustomTextInput
+                    name="email"
+                    placeholder="Email"
+                    errors={errors}
+                    register={register}
+                    setValue={setValue}
+                    options={{
+                        required: 'Email is required',
+                        pattern: {
+                            value: /^\S+@\S+$/i,
+                            message: 'Invalid email address',
+                        },
+                    }}
+                />
+
+                {/* {renderInput('birthDate', 'Birth Date (YYYY-MM-DD)', {
                     pattern: {
                         value: /^\d{4}-\d{2}-\d{2}$/i,
-                        message: 'Invalid birth date',
+                        message: 'Invalid birth date format',
                     },
-                }}
-                defaultValue=""
-            />
-            {errors.birthDate && <Text style={styles.errorText}>{errors.birthDate.message}</Text>}
+                })} */}
+                <CustomTextInput
+                    name="birthDate"
+                    placeholder="Birth Date (YYYY-MM-DD)"
+                    errors={errors}
+                    register={register}
+                    setValue={setValue}
+                    options={{
+                        pattern: {
+                            value: /^\d{4}-\d{2}-\d{2}$/i,
+                            message: 'Invalid birth date format',
+                        },
+                    }}
+                />
 
-            <Controller
-                control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                        style={styles.input}
-                        onBlur={onBlur}
-                        onChangeText={
-                            (value) => {
-                                onChange(value);
-                                setData({
-                                    ...data,
-                                    password: value
-                                });
-                            }
-                        }
+                <CustomTextInput
+                    name="password"
+                    placeholder="Password"
+                    errors={errors}
+                    register={register}
+                    setValue={setValue}
+                    options={{
+                        required: 'Password is required',
+                        minLength: {
+                            value: 8,
+                            message: 'Password must be at least 8 characters',
+                        },
+                    }}
+                    secureTextEntry
+                />
 
-                        value={value}
-                        placeholder="Password"
-                        secureTextEntry
-                    />
-                )}
-                name="password"
-                rules={{
-                    required: 'Password is required',
-                    minLength: {
-                        value: 8,
-                        message: 'Password must be at least 8 characters',
-                    },
-                }}
-                defaultValue=""
-            />
-            {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
+                <CustomTextInput
+                    name="confirmPassword"
+                    placeholder="Confirm Password"
+                    errors={errors}
+                    register={register}
+                    setValue={setValue}
+                    options={{
+                        required: 'Please confirm your password',
+                        validate: (value: string) =>
+                            value === getValues('password') || 'Passwords do not match',
+                    }}
+                    secureTextEntry
+                />
 
-            <Controller
-                control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                        style={styles.input}
-                        onBlur={onBlur}
-                        onChangeText={
-                            (value) => {
-                                onChange(value);
-                                setData({
-                                    ...data,
+                <CustomButton
+                    title="Register"
+                    onPress={handleSubmit(onSubmit)}
+                    disabled={!watch('firstName') || !watch('email')}
+                    className="mt-4"
+                />
 
-                                });
-                            }
-                        }
-                        value={value}
-                        placeholder="Confirm Password"
-                        secureTextEntry
-                    />
-                )}
-                name="confirmPassword"
-                rules={{
-                    required: 'Please confirm your password',
-                    validate: value =>
-                        value === watch('password') || 'Passwords do not match',
-                }}
-
-                defaultValue=""
-            />
-            {errors.confirmPassword && (
-                <Text style={styles.errorText}>{errors.confirmPassword.message}</Text>
-            )}
-
-            <CustomButton
-                title="Register"
-                onPress={handleSubmit(register)}
-                color={''}
-                disabled={watch('firstName') && watch('email') ? false : true} />
-            <CustomButton
-                title="Back to Login"
-                onPress={() => navigation.navigate('Login')}
-                color={''}
-                disabled={false} />
-        </View>
+                <View className="flex-row justify-center items-center mt-4">
+                    <Text className={`mr-2 ${isDarkMode ? 'text-white' : 'text-gray-500'}`}>Already have an account?</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                        <Text className="text-primary font-bold">Login</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </ScrollView>
     );
-
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        paddingHorizontal: 16,
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 16,
-    },
-    input: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        paddingHorizontal: 8,
-        marginBottom: 8,
-        color: 'black',
-    },
-    errorText: {
-        color: 'red',
-        marginBottom: 8,
-    }
-});
-
-export default RegisterScreen;
