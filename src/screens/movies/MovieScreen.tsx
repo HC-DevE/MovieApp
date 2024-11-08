@@ -58,13 +58,16 @@ export const MovieScreen = () => {
                     <Image
                         src={movieDetails?.poster_path ? buildImageUrl(movieDetails.poster_path) : ''}
                         style={{ width: width, height: height * 0.55 }}
-                    // resizeMode="cover"
-                    />
-                    <LinearGradient
-                        className="absolute bottom-0"
+                        resizeMode="cover"
+                    /><LinearGradient
+                        // className="absolute bottom-0"
                         style={{
                             width: width,
-                            height: height * 0.40,
+                            height: height * 0.20,
+                            position: 'absolute',
+                            bottom: 0,
+                            left: 0,
+                            flexShrink: 0,
                         }}
                         colors={isDarkMode
                             ? ['transparent', 'rgba(23,23,23,0.8)', 'rgba(23,23,23,1)']
@@ -93,7 +96,7 @@ export const MovieScreen = () => {
                 </View>
 
                 {/* description */}
-                <Text className={`mt-4 mx-4 tracking-wide text-balance ${isDarkMode ? 'text-white' : 'text-secondary'}`}>
+                <Text className={`mt-4 mx-4 tracking-wide ${isDarkMode ? 'text-white' : 'text-gray'}`}>
                     {movieDetails?.overview}
                 </Text>
             </View>

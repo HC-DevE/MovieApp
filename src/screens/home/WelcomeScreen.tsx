@@ -8,7 +8,7 @@ interface WelcomeScreenProps {
     navigation: any;
 }
 
-const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
+export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
     const { isDarkMode } = useTheme();
 
     const backgroundColorClassName = isDarkMode ? 'bg-black' : 'bg-white';
@@ -24,9 +24,9 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
                         // className="flex-1 justify-center h-full"
                         className="absolute w-full h-full"
                         source={images.STRANGER}
-                        resizeMode="contain"
+                        resizeMode="cover"
                     />
-                    <View className=" flex-col w-full h-full justify-between items-center bg-[#141414da] backdrop-blur-xl blur-xl">
+                    <View className={`flex-col w-full h-full justify-between items-center ${isDarkMode ? 'bg-[#1c1c1cda]' : 'bg-[#f0f0f0da]'} backdrop-blur-xl blur-xl`}>
                         <View className="flex-1 flex-col w-full justify-center">
                             <Text className={`text-3xl text-center font-bold mt-2 ${textColorClassName}`}>Movie App</Text>
                             <Text className={`text-lg text-center mt-8 ${textColorClassName}`} >
@@ -55,5 +55,3 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
         </SafeAreaView>
     );
 };
-
-export default WelcomeScreen;

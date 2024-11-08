@@ -1,21 +1,20 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import RegisterScreen from '../screens/auth/RegisterScreen';
-import LoginScreen from '../screens/auth/LoginScreen';
 import { HomeScreen } from '../screens/home/HomeScreen';
-import WelcomeScreen from '../screens/home/WelcomeScreen';
+import { WelcomeScreen } from '../screens/home/WelcomeScreen';
 import { useAuth } from '../context/AuthContext';
 import { View, ActivityIndicator } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import appTheme from '../constants/theme';
-import ProfileScreen from '../screens/profile/ProfileScreen';
-import { icons, MOVIESLIST } from '../constants';
+import { ProfileScreen } from '../screens/profile/ProfileScreen';
+import { icons } from '../constants';
 import { TabIcon } from '../components/TabIcon';
 import { useTheme } from '../context/ThemeContext';
 import { SearchScreen } from '../screens/search/SearchScreen';
 import { WishlistScreen } from '../screens/wishlist/WishlistScreen';
 import { MovieScreen } from '../screens/movies/MovieScreen';
-import { Movie } from '../components/MovieList';
+import { LoginScreen } from '../screens/auth/LoginScreen';
+import { RegisterScreen } from '../screens/auth/RegisterScreen';
 // import { MovieScreen } from '../screens/movies/MovieScreen';
 // import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 // import AntIconDesign from 'react-native-vector-icons/AntDesign'; // AntDesignIcon
@@ -23,8 +22,6 @@ import { Movie } from '../components/MovieList';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-// const WelcomeStack = createNativeStackNavigator();
-// const HomeTab = createBottomTabNavigator();
 
 const getTabBarIcon = (route: string, focused: boolean, color: string, size: number) => {
     let iconName;
@@ -80,8 +77,6 @@ const AuthenticatedTabs = () => {
             <Tab.Screen name="Search" component={SearchScreen} />
             <Tab.Screen name="Wishlist" component={WishlistScreen} />
             <Tab.Screen name="Profile" component={ProfileScreen} />
-            {/* create a stack navigator for the normal screens */}
-            {/* <Tab.Screen name="Movie" component={MovieScreen} /> */}
         </Tab.Navigator>
     );
 };

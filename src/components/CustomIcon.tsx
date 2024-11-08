@@ -40,7 +40,7 @@ const CustomIcon = ({ onPress, className, iconColor, iconName, iconSize, ...prop
             case IconsName.SEARCH:
                 return 'search1'; //outlined: closecircleo
             case IconsName.STAR:
-                return 'star'; //outlined: staro
+                return 'star';
             default:
                 return 'question';
         }
