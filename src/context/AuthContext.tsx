@@ -17,8 +17,8 @@ interface AuthProps {
     onForgotPassword?: (data: { email: string }) => Promise<any>;
 }
 
-const TOKEN_KEY = process.env.TOKEN_KEY;
-const FAKE_TOKEN = process.env.FAKE_TOKEN;
+const TOKEN_KEY = process.env.TOKEN_KEY || 'token';
+const FAKE_TOKEN = process.env.FAKE_TOKEN || 'fake_token';
 
 const AuthContext = createContext<AuthProps>({});
 
@@ -41,7 +41,6 @@ export const AuthProvider = ({ children }: any) => {
 
             const token = await retrieveDataFromLocalStorage(TOKEN_KEY);
             if (token) {
-                
                 axios.defaults.headers.common.Authorization = `Bearer ${token}`;
                 setAuthState({ token: token, authenticated: true });
             } else {
@@ -54,6 +53,7 @@ export const AuthProvider = ({ children }: any) => {
     async function storeDataToLocalStorage(key: string, value: string) {
         try {
             const token = storage.set(key, value);
+            console.log('store', value);
             // const token = FAKE_TOKEN;
             return token;
         } catch (e) {
@@ -64,6 +64,7 @@ export const AuthProvider = ({ children }: any) => {
     async function retrieveDataFromLocalStorage(key: string) {
         try {
             const value = storage.getString(key);
+            console.log('retrieve', value);
             // const value = FAKE_TOKEN; //always authentificated
             if (value !== null) {
                 return value;
