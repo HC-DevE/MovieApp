@@ -25,8 +25,8 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
         formState: { errors },
     } = useForm<LoginFormData>({
         defaultValues: {
-            email: '',
-            password: '',
+            email: 'johndoe@example.com', //only for testing
+            password: 'johndoe123',
         },
     });
 
