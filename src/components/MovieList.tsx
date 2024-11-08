@@ -6,6 +6,7 @@ import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { MovieResult } from '../interfaces/movie.interface';
 import { buildImageUrl } from '../../lib/api';
 import { MovieBox } from './MovieBox';
+import { MovieCard } from './MovieCard';
 
 export type MovieRootStackParamList = {
     Movie: MovieResult;
@@ -27,12 +28,12 @@ export const MovieItem: React.FC<{ movie: MovieResult }> = ({ movie }) => {
 
     return (
         <TouchableOpacity className={`mr-3 ${backgroundColor}`} onPress={() => navigation.navigate('Movie', movie)}>
-            <Image className="w-24 h-36 rounded" src={movie.poster_path && buildImageUrl(movie.poster_path)} />
+            <Image className="w-[120px] h-40 rounded" src={movie.poster_path && buildImageUrl(movie.poster_path)} />
             <Text className={`${textColor} text-xs mt-1`}>{
                 movie.title.length > 13 ? movie.title.slice(0, 13) + '...' : movie.title}</Text>
             {/* <Text className="text-yellow-500 text-xs">{movie.vote_average.toFixed(1)}</Text> */}
         </TouchableOpacity>
-    )
+    );
 };
 
 export const MovieList: React.FC<MovieListProps> = ({ title, movies, withAverageVote = false }) => {
@@ -48,8 +49,8 @@ export const MovieList: React.FC<MovieListProps> = ({ title, movies, withAverage
             </View>
             <FlatList
                 data={movies}
-                renderItem={({ item }) => withAverageVote ? <MovieBox withAverageVote={withAverageVote} movie={item} /> : <MovieItem movie={item} />}
-                // renderItem={({ item }) => <MovieItem movie={item} />}
+                renderItem={({ item }) => <MovieCard withVoteAverage={withAverageVote} movie={item} />}
+                // renderItem={({ item }) => withAverageVote ? <MovieBox withAverageVote={withAverageVote} movie={item} /> : <MovieItem movie={item} />}
                 keyExtractor={(item) => item.id.toString()}
                 horizontal
                 showsHorizontalScrollIndicator={false}

@@ -20,16 +20,17 @@ export const MovieBox: React.FC<{ movie: MovieResult, withAverageVote: boolean }
     const backgroundColor = 'bg-transparent';
 
     return (
-        <TouchableOpacity className={`mr-3 ${backgroundColor}`} onPress={() => navigation.navigate('Movie', movie)}>
+        <TouchableOpacity className="mr-3 bg-transparent" onPress={() => navigation.navigate('Movie', movie)}>
             <View style={styles.parent}>
                 <Image style={styles.icon} resizeMode="cover" src={movie?.poster_path && buildImageUrl(movie?.poster_path)} />
                 <LinearGradient style={styles.frameWrapper} locations={[0, 1]} colors={['rgba(34, 31, 30, 0)', 'rgba(34, 31, 30, 0.5)']} useAngle={true} angle={180}>
                     <View style={[styles.movieNameParent, styles.parentFlexBox]}>
                         <Text style={[styles.movieName, styles.textTypo]}>{movie.title.slice(0, 15) + '...'}</Text>
-                        {withAverageVote && <View style={[styles.starParent, styles.parentFlexBox]}>
-                            <CustomIcon iconName={IconsName.STAR} iconColor={appTheme.COLORS.primary} iconSize={12} />
-                            <Text style={[styles.text, styles.textTypo]}>{movie.vote_average.toFixed(1)}</Text>
-                        </View>}
+                        {withAverageVote &&
+                            <View style={[styles.starParent, styles.parentFlexBox]}>
+                                <CustomIcon iconName={IconsName.STAR} iconColor={appTheme.COLORS.primary} iconSize={12} />
+                                <Text style={[styles.text, styles.textTypo]}>{movie.vote_average.toFixed(1)}</Text>
+                            </View>}
                     </View>
                 </LinearGradient>
             </View>
