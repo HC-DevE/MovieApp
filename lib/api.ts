@@ -14,6 +14,7 @@ const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/';
 const API_KEY = process.env.TMDB_API_KEY;
 const token = process.env.TMDB_API_ACCES_READ_TOKEN;
+const ACCOUNT_ID = process.env.TMDB_ACCOUNT_ID;
 const MARVEL_COMPANY_IDS = [420];
 
 const tmdbApi = axios.create({
@@ -189,6 +190,60 @@ export const getMovieCredits = async (
     return response.data;
   } catch (error) {
     console.error('Error fetching movie credits:', error);
+    throw error;
+  }
+};
+
+export const getFavoriteMovies = async (): Promise<MovieResult[]> => {
+  try {
+    const response = await tmdbApi.get(
+      `/account/${ACCOUNT_ID}/favorite/movies`,
+    );
+    return response.data.results;
+  } catch (error) {
+    console.error('Error fetching favorite movies:', error);
+    throw error;
+  }
+};
+
+export const getWatchlistMovies = async (): Promise<MovieResult[]> => {
+  try {
+    const response = await tmdbApi.get(
+      `/account/${ACCOUNT_ID}/watchlist/movies`,
+    );
+    return response.data.results;
+  } catch (error) {
+    console.error('Error fetching watchlist movies:', error);
+    throw error;
+  }
+};
+
+export const addToFavorite = async (movieId: number) => {
+  try {
+    const response = await tmdbApi.post(`/account/${ACCOUNT_ID}/favorite`, {
+      media_type: 'movie',
+      media_id: movieId,
+      favorite: true,
+    });
+    console.log('response', JSON.stringify(response.data, null, 2));
+    return response.data;
+  } catch (error) {
+    console.error('Error adding to favorite:', error);
+    throw error;
+  }
+};
+
+export const addToWatchlist = async (movieId: number) => {
+  try {
+    const response = await tmdbApi.post(`/account/${ACCOUNT_ID}/watchlist`, {
+      media_type: 'movie',
+      media_id: movieId,
+      watchlist: true,
+    });
+    console.log('response', JSON.stringify(response.data, null, 2));
+    return response.data;
+  } catch (error) {
+    console.error('Error adding to watchlist:', error);
     throw error;
   }
 };
