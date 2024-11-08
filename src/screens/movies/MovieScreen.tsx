@@ -83,7 +83,7 @@ export const MovieScreen = () => {
                 </Text>
                 {/* status realease and duration/runtime */}
                 <Text className={`text-center fond-semibold ${isDarkMode ? 'text-white' : 'text-secondary'}`}>
-                    {movieDetails?.release_date}
+                    {movieDetails?.release_date?.split('-')[0]} - {movieDetails?.runtime} min - {movieDetails?.status}
                 </Text>
                 {/* TODO categry / genres */}
                 <View className="flex-row justify-center mx-4 space-x-2">
