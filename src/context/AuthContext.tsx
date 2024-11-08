@@ -53,7 +53,6 @@ export const AuthProvider = ({ children }: any) => {
     async function storeDataToLocalStorage(key: string, value: string) {
         try {
             const token = storage.set(key, value);
-            console.log('store', value);
             // const token = FAKE_TOKEN;
             return token;
         } catch (e) {
@@ -64,7 +63,6 @@ export const AuthProvider = ({ children }: any) => {
     async function retrieveDataFromLocalStorage(key: string) {
         try {
             const value = storage.getString(key);
-            console.log('retrieve', value);
             // const value = FAKE_TOKEN; //always authentificated
             if (value !== null) {
                 return value;
