@@ -11,14 +11,13 @@ import { images } from '../constants';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { MovieRootStackParamList } from './MovieList';
 
-export const HeroCarousel = ({ className, movies }: { className?: string, movies?: MovieResult[] }) => {
+export const HeroCarousel = ({ className, movies }: { className?: string, movies: MovieResult[] }) => {
     const { isDarkMode } = useTheme();
     const swiperRef = useRef<Swiper>(null);
     const height = appTheme.SIZES.screenHeight;
     const width = appTheme.SIZES.screenWidth;
 
     const navigation = useNavigation<NavigationProp<MovieRootStackParamList>>();
-
 
     const randomMovies = movies
         ?.map(movie => ({ movie, sort: Math.random() }))
@@ -31,9 +30,10 @@ export const HeroCarousel = ({ className, movies }: { className?: string, movies
     };
 
     return (
-        <SafeAreaView className={className} style={{ width: width, height: height * 0.5 }}>
+        <SafeAreaView className={className} style={{ width: width, height: height * 0.54 }}>
             <View className={' w-full flex-1'}>
                 <Swiper
+                    height={height * 0.54}
                     width={width}
                     ref={swiperRef}
                     loop
@@ -64,14 +64,14 @@ export const HeroCarousel = ({ className, movies }: { className?: string, movies
                         <View
                             key={index}
                             className="w-full h-full justify-center items-center"
-                            style={{ height: height * 0.5 }}
+                            style={{ height: height * 0.52 }}
                         >
                             <View className="flex-1 h-full w-full">
                                 <Image
                                     // className="h-full w-full"
-                                    src={movie?.poster_path && buildImageUrl(movie?.poster_path)}
-                                    // source={images.STRANGER}
-                                    style={{ width: width, height: (height * 0.55) * 0.94 }}
+                                    // src={movie?.poster_path && buildImageUrl(movie?.poster_path)}
+                                    source={images.STRANGER}
+                                    style={{ width: width, height: (height * 0.53) * 0.94 }}
                                     resizeMode="cover" //contain
                                 />
                                 <LinearGradient
@@ -81,20 +81,21 @@ export const HeroCarousel = ({ className, movies }: { className?: string, movies
                                         left: 0,
                                         flexShrink: 0,
                                         width: '100%',
-                                        height: 129,
+                                        height: 139,
                                     }}
                                     // locations={[0, 0.24, 0.52, 1]}
-                                    start={{ x: 0.5, y: 0 }}
+                                    start={{ x: 0.3, y: 0 }}
                                     end={{ x: 0.5, y: 1 }}
                                     colors={isDarkMode
-                                        ? ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0.8)', 'black']
-                                        : ['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0.5)', 'rgba(255, 255, 255, 0.8)', 'white']
+                                        ? ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.55)', 'rgba(0, 0, 0, 1)', 'black']
+                                        // : ['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0.5)', 'rgba(255, 255, 255, 0.8)', 'white']
+                                        : ['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0.55)', 'rgba(255, 255, 255, 0.96)', 'white']
                                     }
                                     useAngle={true}
                                     angle={180} />
                             </View>
                             <View className={'flex-1 absolute left-0 bottom-0 w-full items-center'}>
-                                <View className="flex-row justify-between gap-[36px] mb-3 bg-transparent">
+                                <View className="flex-row justify-between gap-[32px] mb-7 bg-transparent">
                                     <Text className={`${isDarkMode ? 'text-white' : 'text-black'}`}>My List</Text>
                                     <Text className={`${isDarkMode ? 'text-white' : 'text-black'}`}>Discover</Text>
                                 </View>
