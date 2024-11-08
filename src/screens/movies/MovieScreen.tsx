@@ -22,7 +22,6 @@ export const MovieScreen = () => {
     const backgroundColor = isDarkMode ? 'bg-black' : 'bg-white';
     const [isFav, setIsFav] = useState(false);
     const [cast, setCast] = useState([1, 2, 3, 4, 5]);
-    // const [similarMovies, setSimilarMovies] = useState(MOVIES.similarMovies);
 
     const height = appTheme.SIZES.screenHeight;
     const width = appTheme.SIZES.screenWidth;

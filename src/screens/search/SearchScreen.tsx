@@ -39,7 +39,7 @@ export const SearchScreen: React.FC = () => {
 
     return (
         <SafeAreaView className={`flex-1 ${backgroundColor}`}>
-            <View className={`flex-row justify-between items-center mx-4 mb-3 mt-2 border focus:border-primary rounded-full ${searchBorderColor}`}>
+            <View className={`flex-row justify-between items-center py-2 mx-4 mb-3 mt-2 border focus:border-primary rounded-full ${searchBorderColor}`}>
                 <CustomIcon className="ml-4" iconName={IconsName.SEARCH} iconColor={searchIconColor} iconSize={24} />
                 <TextInput
                     className={`flex-1 ml-2 tracking-wider ${textColor}`}
