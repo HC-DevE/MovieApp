@@ -3,6 +3,7 @@ import {
   Company,
   DiscoverApiSortByEnum,
   ImageSizeEnum,
+  MovieCredits,
   MovieDetails,
   MovieGenre,
   MovieResult,
@@ -17,9 +18,9 @@ const MARVEL_COMPANY_IDS = [420];
 
 const tmdbApi = axios.create({
   baseURL: BASE_URL,
-  params: {
-    api_key: API_KEY,
-  },
+  // params: {
+  //   api_key: API_KEY,
+  // },
   headers: {
     Authorization: `Bearer ${token}`,
   },
@@ -58,18 +59,8 @@ export const getTopRatedMovies = async (): Promise<MovieResult[]> => {
 export const getMovieDetails = async (
   movieId: number,
 ): Promise<MovieDetails> => {
-  const options = {
-    method: 'GET',
-    url: `${BASE_URL}/movie/${movieId}`,
-    params: {
-      api_key: API_KEY,
-    },
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
   try {
-    const response = await axios.request(options);
+    const response = await tmdbApi.get(`/movie/${movieId}`);
     return response.data;
   } catch (error) {
     console.error(`Error fetching details for movie ID ${movieId}:`, error);
@@ -96,7 +87,7 @@ export const getSimilarMovies = async (
 ): Promise<MovieResult[]> => {
   try {
     const response = await tmdbApi.get(
-      `${BASE_URL}/movie/${movieId}/similar?language=en-US&page=1`,
+      `/movie/${movieId}/similar?language=en-US&page=1`,
     );
     return response.data.results;
   } catch (error) {
@@ -116,7 +107,9 @@ export const getDiscoverMovies = async ({
   sortBy?: DiscoverApiSortByEnum;
   companyIds?: number[];
 } = {}): Promise<MovieResult[]> => {
-  const companiesIds = isMarvel ? [...MARVEL_COMPANY_IDS, ...(companyIds || [])] : companyIds;
+  const companiesIds = isMarvel
+    ? [...MARVEL_COMPANY_IDS, ...(companyIds || [])]
+    : companyIds;
   const params = {
     sort_by: sortBy,
     with_genres: genreIds?.join('|'),
@@ -187,3 +180,15 @@ export const getUpcomingMovies =
       throw error;
     }
   };
+
+export const getMovieCredits = async (
+  movieId: number,
+): Promise<MovieCredits> => {
+  try {
+    const response = await tmdbApi.get(`/movie/${movieId}/credits`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching movie credits:', error);
+    throw error;
+  }
+};

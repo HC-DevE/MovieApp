@@ -10,7 +10,7 @@ import { MovieList } from '../../components/MovieList';
 import { useTheme } from '../../context/ThemeContext';
 import { useQuery } from '@tanstack/react-query';
 import { getDiscoverMovies, getMovieGenres, getNowPlayingMovies, getTopRatedMovies, getTrendingMovies, getUpcomingMovies } from '../../../lib/api';
-import { MovieGenre } from '../../interfaces/movie.interface';
+import { MovieGenre, MovieResult } from '../../interfaces/movie.interface';
 
 interface HomeScreenProps {
     // navigation: StackNavigationProp<any, 'Home'>;
@@ -64,8 +64,12 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     //     queryFn: async () => await getUpcomingMovies(),
     // });
 
+    const filterMoviesByGenre = (movies: MovieResult[]) => {
+        return movies?.filter((movie) => selectedGenre.id === 'all' || movie.genre_ids.includes(selectedGenre.id)) || [];
+    };
 
-    if (isMarvelFetching || isTrendingFetching || isGenresFetching) {
+
+    if (isMarvelFetching || isTrendingFetching || isGenresFetching || isTopRatedFetching) {
         return (
             <SafeAreaView className={`h-full items-center justify-center ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
                 <ActivityIndicator />
@@ -73,13 +77,13 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         );
     }
 
-    // if (discoverError || trendingError || genresError) {
-    //     return (
-    //         <SafeAreaView className={`h-full items-center justify-center ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
-    //             <Text>Error fetching data</Text>
-    //         </SafeAreaView>
-    //     );
-    // }
+    if (marvelError || trendingError || genresError || topRatedError) {
+        return (
+            <SafeAreaView className={`h-full items-center justify-center ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
+                <Text>Error fetching data</Text>
+            </SafeAreaView>
+        );
+    }
 
     return (
         <SafeAreaView className={`flex-1 w-full h-full items-center justify-between ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
@@ -90,17 +94,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
                     setSelectedGenre={setSelectedGenre}
                 />
 
-                <HeroCarousel movies={(trendingMovies || [])?.filter(
-                    (movie) => movie.genre_ids.includes(selectedGenre.id) || selectedGenre.name === 'All'
-                )} />
+                <HeroCarousel movies={filterMoviesByGenre(trendingMovies)} />
                 <MovieList title={'Marvel Studios'}
-                    movies={(marvelMovies || [])?.filter(
-                        (movie) => selectedGenre.name === 'All' || movie.genre_ids.includes(selectedGenre.id)
-                    )}
+                    movies={filterMoviesByGenre(marvelMovies)}
                 />
-                <MovieList withAverageVote title={'Best Movies'} movies={(topRatedMovies || [])?.filter(
-                    (movie) => selectedGenre.name === 'All' || movie.genre_ids.includes(selectedGenre.id)
-                )} />
+                <MovieList withAverageVote title={'Best Movies'} movies={filterMoviesByGenre(topRatedMovies)} />
                 <AdBanner ad={ad} />
             </ScrollView>
         </SafeAreaView>

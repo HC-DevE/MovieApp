@@ -122,3 +122,33 @@ export type Company = {
   name: string;
   origin_country: string;
 };
+
+
+export type MovieCredits = {
+  id: number;
+  cast: CastMember[];
+  crew: CrewMember[];
+}
+
+export type Person = {
+  adult: boolean;
+  gender: number;
+  id: number;
+  known_for_department: string;
+  name: string;
+  original_name: string;
+  popularity: number;
+  profile_path: string | null;
+  credit_id: string;
+}
+
+export interface CastMember extends Person {
+  cast_id: number;
+  character: string;
+  order: number;
+}
+
+export interface CrewMember extends Person {
+  department: string;
+  job: string;
+}

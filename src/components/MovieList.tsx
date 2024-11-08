@@ -1,11 +1,8 @@
 import React from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { CustomButton, ButtonSize, ButtonType, ButtonVariant } from './CustomButton';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { MovieResult } from '../interfaces/movie.interface';
-import { buildImageUrl } from '../../lib/api';
-import { MovieBox } from './MovieBox';
 import { MovieCard } from './MovieCard';
 
 export type MovieRootStackParamList = {
@@ -17,24 +14,6 @@ type MovieListProps = {
     movies: MovieResult[];
     withAverageVote?: boolean;
 }
-
-export const MovieItem: React.FC<{ movie: MovieResult }> = ({ movie }) => {
-    const { isDarkMode } = useTheme();
-    const navigation = useNavigation<NavigationProp<MovieRootStackParamList>>();
-
-    const textColor = isDarkMode ? 'text-white' : 'text-black';
-    const backgroundColor = 'bg-transparent';
-    // const backgroundColor = isDarkMode ? 'bg-black' : 'bg-white';
-
-    return (
-        <TouchableOpacity className={`mr-3 ${backgroundColor}`} onPress={() => navigation.navigate('Movie', movie)}>
-            <Image className="w-[120px] h-40 rounded" src={movie.poster_path && buildImageUrl(movie.poster_path)} />
-            <Text className={`${textColor} text-xs mt-1`}>{
-                movie.title.length > 13 ? movie.title.slice(0, 13) + '...' : movie.title}</Text>
-            {/* <Text className="text-yellow-500 text-xs">{movie.vote_average.toFixed(1)}</Text> */}
-        </TouchableOpacity>
-    );
-};
 
 export const MovieList: React.FC<MovieListProps> = ({ title, movies, withAverageVote = false }) => {
     const { isDarkMode } = useTheme();
@@ -50,7 +29,6 @@ export const MovieList: React.FC<MovieListProps> = ({ title, movies, withAverage
             <FlatList
                 data={movies}
                 renderItem={({ item }) => <MovieCard withVoteAverage={withAverageVote} movie={item} />}
-                // renderItem={({ item }) => withAverageVote ? <MovieBox withAverageVote={withAverageVote} movie={item} /> : <MovieItem movie={item} />}
                 keyExtractor={(item) => item.id.toString()}
                 horizontal
                 showsHorizontalScrollIndicator={false}

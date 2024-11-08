@@ -1,23 +1,12 @@
-import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native'
-import React from 'react'
-import { images } from '../constants';
+import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
+import React from 'react';
 import { useTheme } from '../context/ThemeContext';
+import { CastMember } from '../interfaces/movie.interface';
+import { buildImageUrl } from '../../lib/api';
 
-export type Cast = {
-    cast: string[];
-    crew: string[];
-    id: number;
-    name: string;
-    profile_path: string;
-    character: string;
-    job: string;
-    department: string;
-}
-
-const Cast = ({ cast }) => {
+export const Cast = (cast : CastMember[]) => {
     const { isDarkMode } = useTheme();
-    const characterName = 'test test';
-    const personName = 'test test';
+
 
     return (
         <View>
@@ -27,26 +16,25 @@ const Cast = ({ cast }) => {
                 showsHorizontalScrollIndicator={false}
                 contentContainerClassName="px-4"
             >
-                {cast && cast.map((person, index) => {
+                {cast && cast.map((person, index) => (
                     <TouchableOpacity key={index} className="mr-4 items-center">
-                        <Image source={images.STRANGER}
+                        <Image source={{ uri: buildImageUrl(person?.profile_path) }}
                             className="w-20 h-24 rounded-2xl"
                         />
                         <Text className={`text-xs mt-1 ${isDarkMode ? 'text-white' : 'text-black'}`}>
                             {
-                                characterName.length > 10 ? characterName.slice(0, 10) + '...' : characterName
+                                person.character.length > 10 ? person.character.slice(0, 10) + '...' : person.character
                             }
                         </Text>
                         <Text className={`text-xs mt-1 ${isDarkMode ? 'text-gray-400' : 'text-secondary'}`}>
                             {
-                                personName.length > 10 ? personName.slice(0, 10) + '...' : characterName
+                                person.name.length > 10 ? person.name.slice(0, 10) + '...' : person.name
                             }
                         </Text>
-                    </TouchableOpacity>;
-                })}
+                    </TouchableOpacity>
+                )
+                )}
             </ScrollView>
         </View>
     );
 };
-
-export default Cast;

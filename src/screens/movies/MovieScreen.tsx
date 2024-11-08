@@ -1,16 +1,15 @@
 import { View, Text, ScrollView, Image } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomIcon, { IconsName } from '../../components/CustomIcon';
 import { MovieList } from '../../components/MovieList';
-import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
-import { MOVIES } from '../../constants';
+import { useRoute, useNavigation, RouteProp, CommonActions } from '@react-navigation/native';
 import appTheme from '../../constants/theme';
 import LinearGradient from 'react-native-linear-gradient';
-import Cast from '../../components/Cast';
-import { MovieDetails, MovieResult } from '../../interfaces/movie.interface';
+// import { Cast } from '../../components/Cast';
+import { MovieResult } from '../../interfaces/movie.interface';
 import { useQuery } from '@tanstack/react-query';
-import { buildImageUrl, getMovieDetails, getSimilarMovies } from '../../../lib/api';
+import { buildImageUrl, getMovieCredits, getMovieDetails, getSimilarMovies } from '../../../lib/api';
 import { useTheme } from '../../context/ThemeContext';
 
 export const MovieScreen = () => {
@@ -21,12 +20,11 @@ export const MovieScreen = () => {
     const { isDarkMode } = useTheme();
     const backgroundColor = isDarkMode ? 'bg-black' : 'bg-white';
     const [isFav, setIsFav] = useState(false);
-    const [cast, setCast] = useState([1, 2, 3, 4, 5]);
 
     const height = appTheme.SIZES.screenHeight;
     const width = appTheme.SIZES.screenWidth;
 
-    const { data: movieDetails, isFetching: isDetailsFetching, error: isDetailsError } = useQuery({
+    const { data: movieDetails, isFetching: isDetailFetching, error: isDetailError } = useQuery({
         queryKey: ['movieDetails', movie.id],
         queryFn: async () => await getMovieDetails(movie.id),
     });
@@ -34,6 +32,11 @@ export const MovieScreen = () => {
     const { data: similarMovies, isFetching: isSimilarFetching, error: isSimilarError } = useQuery({
         queryKey: ['similarMovies', movie.id],
         queryFn: async () => await getSimilarMovies(movie.id),
+    });
+
+    const { data: movieCredits, isFetching: isCreditFetching, error: isCreditError } = useQuery({
+        queryKey: ['MovieCredits', movie.id],
+        queryFn: async () => await getMovieCredits(movie.id),
     });
 
     const handleFav = () => {
@@ -48,17 +51,20 @@ export const MovieScreen = () => {
         >
             <View className="w-full">
                 <SafeAreaView className="absolute z-20 w-full flex-row justify-between items-center px-4 py-2">
-                    <CustomIcon className="bg-primary rounded-xl p-1" iconName={IconsName.ARROW_LEFT} iconColor={'white'} onPress={() => navigation.goBack()} />
+                    <CustomIcon className="bg-primary rounded-xl p-1" iconName={IconsName.ARROW_LEFT} iconColor={'white'} onPress={() => navigation.dispatch(
+                        CommonActions.goBack()
+                    )} />
                     <CustomIcon iconName={IconsName.HEART} iconColor={isFav === true ? 'red' : 'white'} onPress={handleFav} />
                 </SafeAreaView>
                 <View
                     className="w-full justify-center items-center"
                 >
                     <Image
-                        src={movieDetails?.poster_path ? buildImageUrl(movieDetails.poster_path) : ''}
+                        source={{ uri: buildImageUrl(movieDetails?.poster_path || '') }}
                         style={{ width: width, height: height * 0.55 }}
                         resizeMode="cover"
-                    /><LinearGradient
+                    />
+                    <LinearGradient
                         // className="absolute bottom-0"
                         style={{
                             width: width,
@@ -81,11 +87,9 @@ export const MovieScreen = () => {
                 <Text className={`text-center text-3xl font-bold tracking-wider ${isDarkMode ? 'text-white' : 'text-black'}`}>
                     {movieDetails?.title}
                 </Text>
-                {/* status realease and duration/runtime */}
                 <Text className={`text-center fond-semibold ${isDarkMode ? 'text-white' : 'text-secondary'}`}>
                     {movieDetails?.release_date?.split('-')[0]} - {movieDetails?.runtime} min - {movieDetails?.status}
                 </Text>
-                {/* TODO categry / genres */}
                 <View className="flex-row justify-center mx-4 space-x-2">
                     {movieDetails?.genres && movieDetails.genres.length > 0 && (
                         <Text className={`text-center font-bold ${isDarkMode ? 'text-white' : 'text-secondary'}`}>
@@ -93,16 +97,26 @@ export const MovieScreen = () => {
                         </Text>
                     )}
                 </View>
-
-                {/* description */}
+                <View className="flex-row justify-center items-center mt-2 gap-2">
+                    <CustomIcon iconName={IconsName.STAR} iconColor={appTheme.COLORS.primary} iconSize={16} />
+                    <Text className={`font-bold ${isDarkMode ? 'text-white' : 'text-secondary'}`}>
+                        {movieDetails?.vote_average.toFixed(1)} ( {movieDetails?.vote_count} )
+                    </Text>
+                </View>
                 <Text className={`mt-4 mx-4 tracking-wide ${isDarkMode ? 'text-white' : 'text-gray'}`}>
                     {movieDetails?.overview}
                 </Text>
             </View>
-            {/* TODO: cast members */}
-            <Cast cast={cast} />
-            {/* similar movies */}
-            <MovieList title={'Similar Movies'} movies={similarMovies} />
-        </ScrollView>
+
+
+            {/* {movieCredits && <Cast cast={movieCredits?.cast} />} */}
+
+            <MovieList title={'Similar Movies'} movies={(similarMovies || [])} />
+
+            <View className="flex-column justify-center items-center mt-4 gap-2">
+                <Text className={`font-bold ${isDarkMode ? 'text-white' : 'text-secondary'}`}>Budget: {movieDetails?.budget.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</Text>
+                <Text className={`font-bold ${isDarkMode ? 'text-white' : 'text-secondary'}`}>Revenue: {movieDetails?.revenue.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</Text>
+            </View >
+        </ScrollView >
     );
 };

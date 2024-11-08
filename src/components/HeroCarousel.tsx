@@ -5,7 +5,6 @@ import { CustomButton, ButtonType, ButtonVariant } from './CustomButton';
 import LinearGradient from 'react-native-linear-gradient';
 import appTheme from '../constants/theme';
 import { MovieResult } from '../interfaces/movie.interface';
-import { buildImageUrl } from '../../lib/api';
 import { useTheme } from '../context/ThemeContext';
 import { images } from '../constants';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
