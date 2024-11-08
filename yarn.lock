@@ -3015,6 +3015,7 @@ __metadata:
     react-native: 0.75.3
     react-native-dotenv: ^3.4.11
     react-native-linear-gradient: ^2.8.3
+    react-native-mmkv: ^3.1.0
     react-native-reanimated: ^3.16.1
     react-native-safe-area-context: ^4.14.0
     react-native-screens: ^3.34.0
@@ -8507,6 +8508,16 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: f980d324e551bbc475c6406bdc5250a08242020cbe653412fa169bbdf51e28a502e225de105b4d696d6a1a1b733d44782469020f4936d8b3ce0e2c78e51cf58f
+  languageName: node
+  linkType: hard
+
+"react-native-mmkv@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "react-native-mmkv@npm:3.1.0"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 0cba51a0b4d830f2304219f58ce016f5e0635953cda0900c45cdc01e2dbd04326a03451e9001bc61edd2af9f8539d6a1e9afe67e4b9417e5d45c803ef938ce35
   languageName: node
   linkType: hard
 

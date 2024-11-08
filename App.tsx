@@ -9,8 +9,11 @@ import AppNav from './src/navigation/AppNavigator';
 import './global.css';
 import { ThemeProvider } from './src/context/ThemeContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { MMKV } from 'react-native-mmkv';
 
 const queryClient = new QueryClient();
+
+export const storage = new MMKV();
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
