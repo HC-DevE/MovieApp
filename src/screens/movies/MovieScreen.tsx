@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, Image } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomIcon, { IconsName } from '../../components/CustomIcon';
 import { MovieList } from '../../components/MovieList';
@@ -8,18 +8,19 @@ import appTheme from '../../constants/theme';
 import LinearGradient from 'react-native-linear-gradient';
 // import { Cast } from '../../components/Cast';
 import { MovieResult } from '../../interfaces/movie.interface';
-import { useQuery } from '@tanstack/react-query';
-import { buildImageUrl, getMovieCredits, getMovieDetails, getSimilarMovies } from '../../../lib/api';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { addRemoveFavorite, buildImageUrl, getFavoriteMovies, getMovieCredits, getMovieDetails, getSimilarMovies } from '../../../lib/api';
 import { useTheme } from '../../context/ThemeContext';
 
 export const MovieScreen = () => {
     type MovieScreenRouteProp = RouteProp<{ MovieScreen: MovieResult }, 'MovieScreen'>;
     const { params: movie } = useRoute<MovieScreenRouteProp>();
-
     const navigation = useNavigation();
     const { isDarkMode } = useTheme();
-    const backgroundColor = isDarkMode ? 'bg-black' : 'bg-white';
+    const queryClient = useQueryClient();
     const [isFav, setIsFav] = useState(false);
+
+    const backgroundColor = isDarkMode ? 'bg-black' : 'bg-white';
 
     const height = appTheme.SIZES.screenHeight;
     const width = appTheme.SIZES.screenWidth;
@@ -34,15 +35,32 @@ export const MovieScreen = () => {
         queryFn: async () => await getSimilarMovies(movie.id),
     });
 
-    const { data: movieCredits, isFetching: isCreditFetching, error: isCreditError } = useQuery({
-        queryKey: ['MovieCredits', movie.id],
-        queryFn: async () => await getMovieCredits(movie.id),
+    // const { data: movieCredits, isFetching: isCreditFetching, error: isCreditError } = useQuery({
+    //     queryKey: ['MovieCredits', movie.id],
+    //     queryFn: async () => await getMovieCredits(movie.id),
+    // });
+
+    const { data: favoriteMovies, isFetching: isFavoriteFetching, error: isFavoriteError } = useQuery({
+        queryKey: ['favoriteMovies'],
+        queryFn: async () => await getFavoriteMovies(),
     });
 
-    const handleFav = () => {
-        console.log('Added to Favorite', movie);
-        setIsFav(!isFav);
+    const { mutate: addRemoveFav } = useMutation({
+        mutationFn: (movieId: number) => addRemoveFavorite(movieId, !isFav),
+        onSuccess: () => {
+            setIsFav(!isFav);
+            queryClient.invalidateQueries({ queryKey: ['favoriteMovies'] });
+        },
+    });
+
+    const handleFav = async () => {
+        addRemoveFav(movie.id);
     };
+
+    useEffect(() => {
+        const isMovieFav = favoriteMovies?.find((fav) => fav.id === movie.id);
+        setIsFav(!!isMovieFav);
+    }, [favoriteMovies, movie.id]);
 
     return (
         <ScrollView

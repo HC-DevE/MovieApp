@@ -128,7 +128,7 @@ export const CustomButton = ({
       disabled={disabled || loading}
       onPress={onPress}
       className={buttonClasses}
-      {...props}
+      // {...props}
     >
       {loading ? (
         <ActivityIndicator color={isDarkMode ? 'white' : 'black'} />

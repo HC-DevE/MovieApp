@@ -19,9 +19,10 @@ const MARVEL_COMPANY_IDS = [420];
 
 const tmdbApi = axios.create({
   baseURL: BASE_URL,
-  // params: {
-  //   api_key: API_KEY,
-  // },
+  //only api_key or a token is required for requests not both
+  params: {
+    api_key: API_KEY,
+  },
   headers: {
     Authorization: `Bearer ${token}`,
   },
@@ -218,29 +219,33 @@ export const getWatchlistMovies = async (): Promise<MovieResult[]> => {
   }
 };
 
-export const addToFavorite = async (movieId: number) => {
+export const addRemoveFavorite = async (movieId: number, favorite: boolean) => {
   try {
     const response = await tmdbApi.post(`/account/${ACCOUNT_ID}/favorite`, {
       media_type: 'movie',
       media_id: movieId,
-      favorite: true,
+      favorite,
     });
-    console.log('response', JSON.stringify(response.data, null, 2));
     return response.data;
   } catch (error) {
-    console.error('Error adding to favorite:', error);
+    console.error(
+      `Error ${favorite ? 'adding to' : 'removing from'} favorite:`,
+      error,
+    );
     throw error;
   }
 };
 
-export const addToWatchlist = async (movieId: number) => {
+export const addRemoveWatchlist = async (
+  movieId: number,
+  watchlist: boolean,
+) => {
   try {
     const response = await tmdbApi.post(`/account/${ACCOUNT_ID}/watchlist`, {
       media_type: 'movie',
       media_id: movieId,
-      watchlist: true,
+      watchlist,
     });
-    console.log('response', JSON.stringify(response.data, null, 2));
     return response.data;
   } catch (error) {
     console.error('Error adding to watchlist:', error);
