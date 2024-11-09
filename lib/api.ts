@@ -3,6 +3,7 @@ import {
   Company,
   DiscoverApiSortByEnum,
   ImageSizeEnum,
+  MovieCredits,
   MovieDetails,
   MovieGenre,
   MovieResult,
@@ -13,10 +14,12 @@ const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/';
 const API_KEY = process.env.TMDB_API_KEY;
 const token = process.env.TMDB_API_ACCES_READ_TOKEN;
+const ACCOUNT_ID = process.env.TMDB_ACCOUNT_ID;
 const MARVEL_COMPANY_IDS = [420];
 
 const tmdbApi = axios.create({
   baseURL: BASE_URL,
+  //only api_key or a token is required for requests not both
   params: {
     api_key: API_KEY,
   },
@@ -58,18 +61,8 @@ export const getTopRatedMovies = async (): Promise<MovieResult[]> => {
 export const getMovieDetails = async (
   movieId: number,
 ): Promise<MovieDetails> => {
-  const options = {
-    method: 'GET',
-    url: `${BASE_URL}/movie/${movieId}`,
-    params: {
-      api_key: API_KEY,
-    },
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
   try {
-    const response = await axios.request(options);
+    const response = await tmdbApi.get(`/movie/${movieId}`);
     return response.data;
   } catch (error) {
     console.error(`Error fetching details for movie ID ${movieId}:`, error);
@@ -96,7 +89,7 @@ export const getSimilarMovies = async (
 ): Promise<MovieResult[]> => {
   try {
     const response = await tmdbApi.get(
-      `${BASE_URL}/movie/${movieId}/similar?language=en-US&page=1`,
+      `/movie/${movieId}/similar?language=en-US&page=1`,
     );
     return response.data.results;
   } catch (error) {
@@ -116,7 +109,9 @@ export const getDiscoverMovies = async ({
   sortBy?: DiscoverApiSortByEnum;
   companyIds?: number[];
 } = {}): Promise<MovieResult[]> => {
-  const companiesIds = isMarvel ? [...MARVEL_COMPANY_IDS, ...(companyIds || [])] : companyIds;
+  const companiesIds = isMarvel
+    ? [...MARVEL_COMPANY_IDS, ...(companyIds || [])]
+    : companyIds;
   const params = {
     sort_by: sortBy,
     with_genres: genreIds?.join('|'),
@@ -187,3 +182,73 @@ export const getUpcomingMovies =
       throw error;
     }
   };
+
+export const getMovieCredits = async (
+  movieId: number,
+): Promise<MovieCredits> => {
+  try {
+    const response = await tmdbApi.get(`/movie/${movieId}/credits`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching movie credits:', error);
+    throw error;
+  }
+};
+
+export const getFavoriteMovies = async (): Promise<MovieResult[]> => {
+  try {
+    const response = await tmdbApi.get(
+      `/account/${ACCOUNT_ID}/favorite/movies`,
+    );
+    return response.data.results;
+  } catch (error) {
+    console.error('Error fetching favorite movies:', error);
+    throw error;
+  }
+};
+
+export const getWatchlistMovies = async (): Promise<MovieResult[]> => {
+  try {
+    const response = await tmdbApi.get(
+      `/account/${ACCOUNT_ID}/watchlist/movies`,
+    );
+    return response.data.results;
+  } catch (error) {
+    console.error('Error fetching watchlist movies:', error);
+    throw error;
+  }
+};
+
+export const addRemoveFavorite = async (movieId: number, favorite: boolean) => {
+  try {
+    const response = await tmdbApi.post(`/account/${ACCOUNT_ID}/favorite`, {
+      media_type: 'movie',
+      media_id: movieId,
+      favorite,
+    });
+    return response.data;
+  } catch (error) {
+    console.error(
+      `Error ${favorite ? 'adding to' : 'removing from'} favorite:`,
+      error,
+    );
+    throw error;
+  }
+};
+
+export const addRemoveWatchlist = async (
+  movieId: number,
+  watchlist: boolean,
+) => {
+  try {
+    const response = await tmdbApi.post(`/account/${ACCOUNT_ID}/watchlist`, {
+      media_type: 'movie',
+      media_id: movieId,
+      watchlist,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error adding to watchlist:', error);
+    throw error;
+  }
+};

@@ -1,12 +1,12 @@
 import React from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { View, Text, TextInput } from 'react-native';
+import { useForm } from 'react-hook-form';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { NavigationProp } from '@react-navigation/native';
 import { ButtonType, ButtonVariant, CustomButton } from '../../components/CustomButton';
 import { LoginFormData } from '../../models/Login.model';
 import { useAuth } from '../../context/AuthContext';
-import appTheme from '../../constants/theme';
 import { useTheme } from '../../context/ThemeContext';
+import { CustomTextInput } from '../../components/CustomTextInput';
 
 interface LoginScreenProps {
     navigation: NavigationProp<any, 'Login'>;
@@ -39,26 +39,32 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
 
     return (
         <View className={`flex-1 justify-between px-5 pt-16 pb-10 ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
-            <Text className="text-2xl font-bold text-center text-primary mb-6">Login</Text>
+            <View className="mt-16">
+                <Text className="text-3xl font-bold text-center text-primary mb-4">Login</Text>
+                {/* <Text className="text-3xl font-bold text-primary text-center mb-4">
+                    Create Account
+                </Text> */}
+                <Text className={`${isDarkMode ? 'text-white' : 'text-gray-500'} text-center`}>
+                    Enter your email and password to login
+                </Text>
+            </View>
 
             <View className="flex-1 justify-center">
                 <View className="mb-8">
                     <View className="mb-4">
-                        <TextInput
-                            {...register('email', {
+                        <CustomTextInput
+                            name="email"
+                            placeholder="Email"
+                            errors={errors}
+                            register={register}
+                            setValue={setValue}
+                            options={{
                                 required: 'Email is required',
                                 pattern: {
                                     value: /^\S+@\S+$/i,
                                     message: 'Invalid email address',
                                 },
-                            })}
-                            className={`border rounded-md px-3 py-2 mb-1 ${errors.email
-                                ? 'border-red-500 text-red-500'
-                                : 'border-primary text-primary'
-                                }`}
-                            placeholder="Email"
-                            placeholderTextColor={errors.email ? 'red' : appTheme.COLORS.primary}
-                            onChangeText={(value) => setValue('email', value)}
+                            }}
                         />
 
                         {errors.email && (
@@ -67,17 +73,15 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                     </View>
 
                     <View className="mb-4">
-                        <TextInput
-                            {...register('password', {
-                                required: 'Password is required',
-                            })}
-                            className={`border rounded-md px-3 py-2 mb-1 ${errors.password
-                                ? 'border-red-500 text-red-500'
-                                : 'border-primary text-primary'
-                                }`}
+                        <CustomTextInput
+                            name="password"
                             placeholder="Password"
-                            placeholderTextColor={errors.password ? 'red' : appTheme.COLORS.primary}
-                            onChangeText={(value) => setValue('password', value)}
+                            errors={errors}
+                            register={register}
+                            setValue={setValue}
+                            options={{
+                                required: 'Password is required',
+                            }}
                             secureTextEntry
                         />
                         {errors.password && (
@@ -87,7 +91,14 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                 </View>
 
                 <CustomButton title="Sign In" onPress={handleSubmit(onSubmit)} />
+                <View className="flex-row justify-center items-center mt-4">
+                    <Text className={`mr-2 ${isDarkMode ? 'text-white' : 'text-gray-500'}`}>Don't have an account?</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                        <Text className="text-primary font-bold">Sign Up</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
+
 
             <View className="items-center">
                 <CustomButton

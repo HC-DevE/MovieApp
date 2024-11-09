@@ -44,7 +44,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, withVoteAverage }) 
                         angle={180}
                     >
                         <View className="flex-row items-center justify-between">
-                            <Text className={`text-xs font-semibold ${textColor} w-16`} numberOfLines={1}>
+                            <Text className={`text-xs font-semibold ${textColor} w-20`} numberOfLines={1}>
                                 {movie.title.length > 13 ? `${movie.title.slice(0, 13)}...` : movie.title}
                             </Text>
                             <View className="flex-row items-center gap-1">
