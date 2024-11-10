@@ -44,11 +44,11 @@ export const WishlistScreen: React.FC = () => {
                 keyExtractor={(item) => item.id.toString()}
                 contentContainerClassName={'p-[16px]'}
             />}
-            {/* {(watchlistMovies?.length === 0 || !watchlistMovies) &&
+            {(watchlistMovies?.length === 0 || !watchlistMovies) &&
                 <Text className={`text-lg font-bold p-4 ${isDarkMode ? 'text-white' : 'text-black'}`}>
                     No movies in your wishlist
                 </Text>
-            } */}
+            }
         </View>
     );
 };

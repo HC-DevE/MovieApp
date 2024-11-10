@@ -9,12 +9,14 @@ import { useTheme } from '../context/ThemeContext';
 // import { images } from '../constants';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { MovieRootStackParamList } from './MovieList';
-import { buildImageUrl } from '../../lib/api';
+import { addRemoveWatchlist, buildImageUrl } from '../../lib/api';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const HeroCarousel = ({ className, movies }: { className?: string, movies: MovieResult[] }) => {
     const { isDarkMode } = useTheme();
     const navigation = useNavigation<NavigationProp<MovieRootStackParamList>>();
     const swiperRef = useRef<Swiper>(null);
+    const queryClient = useQueryClient();
 
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -28,9 +30,17 @@ export const HeroCarousel = ({ className, movies }: { className?: string, movies
         .map(({ movie }) => movie)
         .slice(0, 5);
 
-    const addToWishlist = (movie: MovieResult) => {
-        console.log('Added to wishlist', movie);
+    const { mutate: addToWatchlist } = useMutation({
+        mutationFn: (movieId: number) => addRemoveWatchlist(movieId, true),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['watchlistMovies'] });
+        },
+    });
+
+    const addToWishlist = (movieId: Pick<MovieResult, 'id'>) => {
+        addToWatchlist(movieId.id);
     };
+
 
     return (
         <SafeAreaView className={className} style={{ width: width, height: height * 0.54 }}>
